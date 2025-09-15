@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ayuda P'urhépecha - Español (con Voces Grabadas)</title>
+    
+    <!-- PWA Meta Tags -->
+    <title>Jorhenguarhikua P'urhépecha</title>
+    <meta name="description" content="Guía interactiva de P'urhépecha - Español con audios auténticos.">
+    <meta name="theme-color" content="#0d9488"/>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="images/icons/icon-192x192.png">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,51 +20,28 @@
             font-family: 'Inter', sans-serif;
             background-color: #f8fafc; /* bg-slate-50 */
         }
-        /* Simple scrollbar styling */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #e2e8f0; /* bg-slate-200 */
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #94a3b8; /* bg-slate-400 */
-            border-radius: 8px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #64748b; /* bg-slate-500 */
-        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #e2e8f0; }
+        ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 8px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
         .category-btn.active {
-            background-color: #0d9488; /* bg-teal-600 */
-            color: white;
-            border-color: #0d9488; /* border-teal-600 */
+            background-color: #0d9488; color: white; border-color: #0d9488;
         }
-        .play-btn svg.playing-icon {
-            display: none;
-        }
-        .play-btn.playing svg.play-icon {
-            display: none;
-        }
-        .play-btn.playing svg.playing-icon {
-            display: block;
-        }
-        /* Modal styles */
-        .modal-container {
-            transition: opacity 0.3s ease;
-        }
-        .modal-content {
-            transition: transform 0.3s ease;
-        }
+        .play-btn svg.playing-icon { display: none; }
+        .play-btn.playing svg.play-icon { display: none; }
+        .play-btn.playing svg.playing-icon { display: block; }
+        .modal-container { transition: opacity 0.3s ease; }
+        .modal-content { transition: transform 0.3s ease; }
+        #resultsContainer { transition: opacity 0.3s ease, transform 0.3s ease; }
     </style>
 </head>
 <body class="text-slate-800">
 
     <div class="container mx-auto max-w-3xl p-4 sm:p-6 min-h-screen flex flex-col">
-        <!-- Encabezado de la Aplicación -->
+        <!-- Encabezado -->
         <header class="text-center my-8">
             <div class="flex justify-center items-center gap-4">
-                <!-- Icono representativo de la cultura P'urhépecha -->
-                <svg class="h-12 w-12 text-teal-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                 <svg class="h-12 w-12 text-teal-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 006-6v-1.5a6 6 0 00-6-6v1.5a6 6 0 00-6 6v1.5a6 6 0 006 6zM12 18.75a6 6 0 01-6-6v-1.5a6 6 0 016-6v1.5a6 6 0 016 6v1.5a6 6 0 01-6 6z" />
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 12.75a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z" />
                 </svg>
@@ -78,134 +62,76 @@
         </div>
 
         <!-- Filtros por Categoría -->
-        <div id="categoryFilters" class="mb-8 flex flex-wrap justify-center gap-2 sm:gap-3">
-            <!-- Las categorías se insertarán aquí dinámicamente -->
-        </div>
+        <div id="categoryFilters" class="mb-8 flex flex-wrap justify-center gap-2 sm:gap-3"></div>
 
         <!-- Contenedor de Resultados -->
         <main class="flex-grow flex flex-col items-center">
-            <!-- Mensaje Inicial -->
             <div id="initialPrompt" class="text-center text-slate-500 my-auto">
-                <svg class="mx-auto h-16 w-16 text-slate-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                </svg>
+                <svg class="mx-auto h-16 w-16 text-slate-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
                 <h3 class="mt-2 text-lg font-medium text-slate-700">Explora el vocabulario</h3>
                 <p class="mt-1 text-sm">Selecciona una categoría para comenzar.</p>
             </div>
-            
-            <!-- Contenedor de las tarjetas de palabras -->
-            <div id="resultsContainer" class="w-full space-y-3 hidden transition-all duration-300 ease-in-out">
-                <!-- Las palabras y frases se insertarán aquí como tarjetas -->
-            </div>
+            <div id="resultsContainer" class="w-full space-y-3 hidden opacity-0 scale-95"></div>
         </main>
         
         <!-- Pie de página -->
         <footer class="text-center mt-8 py-4">
-            <p class="text-sm text-slate-500">
-                Voces auténticas grabadas por hablantes nativos.
-            </p>
+            <p class="text-sm text-slate-500">Voces auténticas grabadas por hablantes nativos.</p>
         </footer>
     </div>
     
     <!-- Modal de Detalles -->
     <div id="detailsModal" class="modal-container fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden opacity-0">
-        <div id="modalContent" class="modal-content bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 transform scale-95">
-            <!-- Contenido del modal se insertará aquí -->
-        </div>
+        <div id="modalContent" class="modal-content bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 transform scale-95"></div>
     </div>
-
 
     <!-- Notificación de error de audio -->
     <div id="audioError" class="fixed bottom-5 right-5 bg-red-600 text-white px-6 py-3 rounded-lg shadow-xl hidden transition-opacity duration-300" role="alert">
-        <div class="flex items-center gap-3">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-            </svg>
-            <div>
-                <p class="font-bold">Error de audio</p>
-                <p id="audioErrorFile" class="text-sm">No se encontró el archivo.</p>
-            </div>
+         <div class="flex items-center gap-3">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg>
+            <div><p class="font-bold">Error de audio</p><p id="audioErrorFile" class="text-sm">No se encontró el archivo.</p></div>
         </div>
     </div>
 
-
     <script>
+        // --- PWA Service Worker Registration ---
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    })
+                    .catch(err => {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+
         const dictionary = [
-            // Saludos
-            { 
-                purhepecha: 'Nájki, ¿nómbe úsï?', 
-                espanol: 'Hola, ¿cómo estás?', 
-                categoria: 'Saludos', 
-                audioSrc: 'audio/najki_nombe_usi.mp3',
-                uso: "Es el saludo más común e informal. Se puede usar a cualquier hora del día.",
-                ejemplos: [
-                    { purhepecha: "Nájki, ¿nómbe úsï tata?", espanol: "Hola, ¿cómo está señor?" }
-                ]
-            },
+             { purhepecha: 'Nájki, ¿nómbe úsï?', espanol: 'Hola, ¿cómo estás?', categoria: 'Saludos', audioSrc: 'audio/najki_nombe_usi.mp3', uso: "Es el saludo más común e informal.", ejemplos: [{ purhepecha: "Nájki, ¿nómbe úsï tata?", espanol: "Hola, ¿cómo está señor?" }] },
             { purhepecha: 'Jorhenguarhikua', espanol: 'Gracias', categoria: 'Saludos', audioSrc: 'audio/jorhenguarhikua.mp3' },
             { purhepecha: 'Diósï meiamu', espanol: 'Buenos días / Buenas tardes', categoria: 'Saludos', audioSrc: 'audio/diosi_meiamu.mp3' },
             { purhepecha: 'P’orhépari jásï', espanol: 'Buenas noches', categoria: 'Saludos', audioSrc: 'audio/porhepari_jasi.mp3' },
-
-            // Frases
             { purhepecha: '¿Nómbe jirejtki?', espanol: '¿Cómo te llamas?', categoria: 'Frases', audioSrc: 'audio/nombe_jirejtki.mp3' },
             { purhepecha: 'Juchiti anapu jirej...', espanol: 'Mi nombre es...', categoria: 'Frases', audioSrc: 'audio/juchiti_anapu_jirej.mp3' },
             { purhepecha: '¿Nómbe anapueski?', espanol: '¿De dónde eres?', categoria: 'Frases', audioSrc: 'audio/nombe_anapueski.mp3' },
             { purhepecha: '¿Nómbe xáni?', espanol: '¿Cuánto cuesta?', categoria: 'Frases', audioSrc: 'audio/nombe_xani.mp3' },
             { purhepecha: 'Ásï jantontskani', espanol: 'Vamos a comer', categoria: 'Frases', audioSrc: 'audio/asi_jantontskani.mp3' },
-
-            // Números
             { purhepecha: 'Ma', espanol: 'Uno', categoria: 'Números', audioSrc: 'audio/ma.mp3' },
             { purhepecha: 'Tsimani', espanol: 'Dos', categoria: 'Números', audioSrc: 'audio/tsimani.mp3' },
             { purhepecha: 'Tanimo', espanol: 'Tres', categoria: 'Números', audioSrc: 'audio/tanimo.mp3' },
             { purhepecha: "T'ámu", espanol: 'Cuatro', categoria: 'Números', audioSrc: 'audio/tamu.mp3' },
             { purhepecha: 'Iúmu', espanol: 'Cinco', categoria: 'Números', audioSrc: 'audio/iumu.mp3' },
             { purhepecha: 'Kuímu', espanol: 'Seis', categoria: 'Números', audioSrc: 'audio/kuimu.mp3' },
-
-            // Familia
             { purhepecha: 'Nana', espanol: 'Mamá', categoria: 'Familia', audioSrc: 'audio/nana.mp3', imageSrc: 'images/nana.jpg' },
             { purhepecha: 'Tata', espanol: 'Papá', categoria: 'Familia', audioSrc: 'audio/tata.mp3', imageSrc: 'images/tata.jpg' },
-            
-            // Adjetivos
             { purhepecha: "K'éri", espanol: 'Grande', categoria: 'Adjetivos', audioSrc: 'audio/keri.mp3' },
             { purhepecha: 'Sési jásï', espanol: 'Está muy bonito / a', categoria: 'Adjetivos', audioSrc: 'audio/sesi_jasi.mp3' },
-            
-            // Sentimientos
             { purhepecha: 'Uékperakua', espanol: 'Amor', categoria: 'Sentimientos', audioSrc: 'audio/uekperakua.mp3' },
             { purhepecha: 'Uékasïnga', espanol: 'Te quiero / Te amo', categoria: 'Sentimientos', audioSrc: 'audio/uekasinga.mp3' },
-
-            // Comida
-            { 
-                purhepecha: 'Kurucha', 
-                espanol: 'Pescado', 
-                categoria: 'Comida', 
-                audioSrc: 'audio/kurucha.mp3', 
-                imageSrc: 'images/kurucha.jpg',
-                uso: "Se refiere al pescado en general, tanto vivo como para comer.",
-                cultural: "El pescado es fundamental en la gastronomía de la zona del Lago de Pátzcuaro, especialmente el pescado blanco."
-            },
-            { 
-                purhepecha: 'Corunda', 
-                espanol: 'Corunda (platillo)', 
-                categoria: 'Comida', 
-                audioSrc: 'audio/corunda.mp3', 
-                imageSrc: 'images/corunda.jpg',
-                uso: "Es un tamal de masa de maíz, de forma triangular, envuelto en hojas de la planta del maíz.",
-                cultural: "Las corundas son un platillo ceremonial y festivo en Michoacán.",
-                ejemplos: [
-                    { purhepecha: "Juchari nana sesi corundas arhisïndi.", espanol: "Mi mamá hace unas corundas muy ricas." }
-                ]
-            },
-            
-            // Animales
-            { 
-                purhepecha: 'Uitsïki', 
-                espanol: 'Colibrí', 
-                categoria: 'Animales', 
-                audioSrc: 'audio/uitsiki.mp3', 
-                imageSrc: 'images/uitsiki.jpg',
-                pronunciacion: "La 'ts' suena similar a la 'z' en algunas regiones de España, es un sonido fuerte y rápido.",
-                cultural: "En la mitología P'urhépecha, el colibrí (Uitsïki) era considerado un mensajero de los dioses y un símbolo de valentía.",
-            }
+            { purhepecha: 'Kurucha', espanol: 'Pescado', categoria: 'Comida', audioSrc: 'audio/kurucha.mp3', imageSrc: 'images/kurucha.jpg', uso: "Se refiere al pescado en general.", cultural: "El pescado es fundamental en la gastronomía de la zona del Lago de Pátzcuaro." },
+            { purhepecha: 'Corunda', espanol: 'Corunda (platillo)', categoria: 'Comida', audioSrc: 'audio/corunda.mp3', imageSrc: 'images/corunda.jpg', uso: "Es un tamal de masa de maíz, de forma triangular.", cultural: "Las corundas son un platillo ceremonial y festivo en Michoacán.", ejemplos: [{ purhepecha: "Juchari nana sesi corundas arhisïndi.", espanol: "Mi mamá hace unas corundas muy ricas." }] },
+            { purhepecha: 'Uitsïki', espanol: 'Colibrí', categoria: 'Animales', audioSrc: 'audio/uitsiki.mp3', imageSrc: 'images/uitsiki.jpg', pronunciacion: "La 'ts' suena similar a la 'z' en algunas regiones de España.", cultural: "En la mitología P'urhépecha, el colibrí era un mensajero de los dioses." }
         ];
 
         const searchInput = document.getElementById('searchInput');
@@ -217,7 +143,6 @@
         const detailsModal = document.getElementById('detailsModal');
         const modalContent = document.getElementById('modalContent');
 
-
         let currentAudio = null;
         let currentlyPlayingButton = null;
 
@@ -225,144 +150,57 @@
             if (!src) return;
             if (currentAudio) {
                 currentAudio.pause();
-                currentAudio.currentTime = 0;
                 if(currentlyPlayingButton) currentlyPlayingButton.classList.remove('playing');
             }
             if (currentlyPlayingButton === buttonElement) {
-                currentAudio = null;
-                currentlyPlayingButton = null;
-                return;
+                currentAudio = null; currentlyPlayingButton = null; return;
             }
             currentAudio = new Audio(src);
             currentlyPlayingButton = buttonElement;
             buttonElement.classList.add('playing');
             currentAudio.play().catch(error => {
-                console.error("Error al reproducir el audio:", error);
+                console.error("Error al reproducir audio:", error);
                 audioErrorFile.textContent = `No se encontró: "${src.split('/').pop()}"`;
                 audioError.classList.remove('hidden');
                 setTimeout(() => { audioError.classList.add('hidden'); }, 4000);
                 buttonElement.classList.remove('playing');
-                currentAudio = null;
-                currentlyPlayingButton = null;
+                currentAudio = null; currentlyPlayingButton = null;
             });
             currentAudio.onended = () => {
                  buttonElement.classList.remove('playing');
-                 currentAudio = null;
-                 currentlyPlayingButton = null;
+                 currentAudio = null; currentlyPlayingButton = null;
             }
         }
         
         function openModal(index) {
             const item = dictionary[parseInt(index)];
             if (!item) return;
-            
-            let contentHtml = `
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h2 class="text-3xl font-bold text-teal-800">${item.purhepecha}</h2>
-                        <p class="text-xl text-slate-600 mt-1">${item.espanol}</p>
-                    </div>
-                    <button id="closeModalBtn" class="p-2 rounded-full hover:bg-slate-200">
-                        <svg class="w-6 h-6 text-slate-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-                    </button>
-                </div>
-            `;
-            
-            if (item.imageSrc) {
-                contentHtml += `<img src="${item.imageSrc}" alt="${item.espanol}" class="w-full h-48 object-cover rounded-xl mt-4 mb-6" onerror="this.style.display='none'">`;
-            } else {
-                 contentHtml += '<hr class="my-6">';
-            }
-            
-            if (item.pronunciacion) {
-                contentHtml += `<div class="mb-4">
-                    <h3 class="font-bold text-lg text-slate-800">Guía de Pronunciación</h3>
-                    <p class="text-slate-600">${item.pronunciacion}</p>
-                </div>`;
-            }
-            
-            if (item.uso) {
-                contentHtml += `<div class="mb-4">
-                    <h3 class="font-bold text-lg text-slate-800">Notas de Uso</h3>
-                    <p class="text-slate-600">${item.uso}</p>
-                </div>`;
-            }
-
-            if (item.ejemplos && item.ejemplos.length > 0) {
-                contentHtml += `<div class="mb-4">
-                    <h3 class="font-bold text-lg text-slate-800">Ejemplos en Frases</h3>
-                    <ul class="list-disc list-inside space-y-2 mt-2 pl-2">
-                        ${item.ejemplos.map(e => `<li><span class="text-slate-700 font-medium">${e.purhepecha}</span><br><span class="text-slate-500 text-sm pl-4">${e.espanol}</span></li>`).join('')}
-                    </ul>
-                </div>`;
-            }
-
-            if (item.cultural) {
-                contentHtml += `<div class="mb-4 bg-teal-50 border-l-4 border-teal-500 p-4 rounded-r-lg">
-                    <h3 class="font-bold text-lg text-teal-900">Contexto Cultural</h3>
-                    <p class="text-teal-800">${item.cultural}</p>
-                </div>`;
-            }
-
+            let contentHtml = `<div class="flex justify-between items-start"><di> <h2 class="text-3xl font-bold text-teal-800">${item.purhepecha}</h2> <p class="text-xl text-slate-600 mt-1">${item.espanol}</p></div> <button id="closeModalBtn" class="p-2 rounded-full hover:bg-slate-200"><svg class="w-6 h-6 text-slate-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button></div>`;
+            if (item.imageSrc) { contentHtml += `<img src="${item.imageSrc}" alt="${item.espanol}" class="w-full h-48 object-cover rounded-xl mt-4 mb-6" onerror="this.style.display='none'">`; } else { contentHtml += '<hr class="my-6">'; }
+            if (item.pronunciacion) { contentHtml += `<div class="mb-4"><h3 class="font-bold text-lg text-slate-800">Pronunciación</h3><p class="text-slate-600">${item.pronunciacion}</p></div>`; }
+            if (item.uso) { contentHtml += `<div class="mb-4"><h3 class="font-bold text-lg text-slate-800">Notas de Uso</h3><p class="text-slate-600">${item.uso}</p></div>`; }
+            if (item.ejemplos && item.ejemplos.length > 0) { contentHtml += `<div class="mb-4"><h3 class="font-bold text-lg text-slate-800">Ejemplos</h3><ul class="list-disc list-inside space-y-2 mt-2 pl-2">${item.ejemplos.map(e => `<li><span class="text-slate-700 font-medium">${e.purhepecha}</span><br><span class="text-slate-500 text-sm pl-4">${e.espanol}</span></li>`).join('')}</ul></div>`; }
+            if (item.cultural) { contentHtml += `<div class="mb-4 bg-teal-50 border-l-4 border-teal-500 p-4 rounded-r-lg"><h3 class="font-bold text-lg text-teal-900">Contexto Cultural</h3><p class="text-teal-800">${item.cultural}</p></div>`; }
             modalContent.innerHTML = contentHtml;
             detailsModal.classList.remove('hidden');
-            setTimeout(() => {
-                detailsModal.classList.remove('opacity-0');
-                modalContent.classList.remove('scale-95');
-            }, 10);
-
+            setTimeout(() => { detailsModal.classList.remove('opacity-0'); modalContent.classList.remove('scale-95'); }, 10);
             document.getElementById('closeModalBtn').addEventListener('click', closeModal);
         }
 
         function closeModal() {
             detailsModal.classList.add('opacity-0');
             modalContent.classList.add('scale-95');
-            setTimeout(() => {
-                detailsModal.classList.add('hidden');
-            }, 300);
+            setTimeout(() => { detailsModal.classList.add('hidden'); }, 300);
         }
 
         function renderWords(wordArray) {
             resultsContainer.innerHTML = '';
-            if (wordArray.length === 0) {
-                 resultsContainer.innerHTML = `
-                    <div class="text-center py-10 px-4">
-                        <svg class="mx-auto h-12 w-12 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                        <h3 class="mt-2 text-lg font-medium text-slate-900">Sin resultados</h3>
-                        <p class="mt-1 text-sm text-slate-500">No se encontraron resultados para tu búsqueda. Intenta con otras palabras.</p>
-                    </div>`;
-                return;
-            }
+            if (wordArray.length === 0) { resultsContainer.innerHTML = `<div class="text-center py-10 px-4"><svg class="mx-auto h-12 w-12 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg><h3 class="mt-2 text-lg font-medium text-slate-900">Sin resultados</h3><p class="mt-1 text-sm text-slate-500">No se encontraron resultados.</p></div>`; return; }
             wordArray.forEach((word) => {
                 const card = document.createElement('div');
                 card.className = 'bg-white rounded-xl shadow-md border border-slate-200 flex items-center justify-between transition-shadow hover:shadow-lg';
-
-                const imageHtml = word.imageSrc
-                    ? `<img src="${word.imageSrc}" alt="${word.espanol}" class="w-16 h-16 object-cover rounded-l-lg mr-4 flex-shrink-0" onerror="this.style.display='none';">`
-                    : '<div class="w-4"></div>'; // Espaciador si no hay imagen
-
-                card.innerHTML = `
-                    <div class="flex items-center flex-grow min-w-0 cursor-pointer" data-index="${word.originalIndex}">
-                        ${imageHtml}
-                        <div class="min-w-0 py-4">
-                            <p class="font-semibold text-lg text-teal-800 truncate">${word.purhepecha}</p>
-                            <p class="text-slate-600 truncate">${word.espanol}</p>
-                        </div>
-                    </div>
-                    <div class="px-4">
-                        <button class="play-btn flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-teal-50 hover:bg-teal-100 active:bg-teal-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-colors" data-audio-src="${word.audioSrc}">
-                            <svg class="play-icon w-6 h-6 text-teal-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                               <path stroke-linecap="round" stroke-linejoin="round" d="M19.114 11.632a.75.75 0 010 1.236l-6 3.75a.75.75 0 01-1.114-.618V8.484a.75.75 0 011.114-.618l6 3.75z" />
-                               <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5a.75.75 0 00-.75.75v13.5a.75.75 0 001.5 0V5.25A.75.75 0 008.25 4.5z" />
-                            </svg>
-                            <svg class="playing-icon w-6 h-6 text-teal-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M9 9l10.5-3m0 6.553v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 11-.99-3.467l2.31-.66a2.25 2.25 0 001.632-2.163zm0 0V2.25L9 5.25v10.303m0 0v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 01-.99-3.467l2.31-.66A2.25 2.25 0 009 15.553z" />
-                            </svg>
-                        </button>
-                    </div>
-                `;
+                const imageHtml = word.imageSrc ? `<img src="${word.imageSrc}" alt="${word.espanol}" class="w-16 h-16 object-cover rounded-l-lg mr-4 flex-shrink-0" onerror="this.style.display='none';">` : '<div class="w-4"></div>';
+                card.innerHTML = `<div class="flex items-center flex-grow min-w-0 cursor-pointer" data-index="${word.originalIndex}"><div class="flex items-center flex-grow min-w-0">${imageHtml}<div class="min-w-0 py-4"><p class="font-semibold text-lg text-teal-800 truncate">${word.purhepecha}</p><p class="text-slate-600 truncate">${word.espanol}</p></div></div></div><div class="px-4"><button class="play-btn flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-teal-50 hover:bg-teal-100 active:bg-teal-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-colors" data-audio-src="${word.audioSrc}"><svg class="play-icon w-6 h-6 text-teal-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 11.632a.75.75 0 010 1.236l-6 3.75a.75.75 0 01-1.114-.618V8.484a.75.75 0 011.114-.618l6 3.75z" /><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5a.75.75 0 00-.75.75v13.5a.75.75 0 001.5 0V5.25A.75.75 0 008.25 4.5z" /></svg><svg class="playing-icon w-6 h-6 text-teal-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 9l10.5-3m0 6.553v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 11-.99-3.467l2.31-.66a2.25 2.25 0 001.632-2.163zm0 0V2.25L9 5.25v10.303m0 0v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 01-.99-3.467l2.31-.66A2.25 2.25 0 009 15.553z" /></svg></button></div>`;
                 resultsContainer.appendChild(card);
             });
         }
@@ -372,8 +210,7 @@
             categories.forEach(category => {
                 const button = document.createElement('button');
                 button.className = 'category-btn px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-full hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-all duration-200';
-                button.textContent = category;
-                button.dataset.category = category;
+                button.textContent = category; button.dataset.category = category;
                 categoryFilters.appendChild(button);
             });
         }
@@ -381,21 +218,10 @@
         function filterAndRender() {
             const searchTerm = searchInput.value.toLowerCase();
             const activeCategory = document.querySelector('.category-btn.active')?.dataset.category;
-            
-            // Guardamos el índice original para poder abrir el modal correcto después de filtrar
             let indexedDictionary = dictionary.map((word, index) => ({...word, originalIndex: index}));
-            
             let filteredWords = indexedDictionary;
-            
-            if (activeCategory && activeCategory !== 'Mostrar todo') {
-                filteredWords = filteredWords.filter(word => word.categoria === activeCategory);
-            }
-            if (searchTerm) {
-                filteredWords = filteredWords.filter(word => 
-                    word.purhepecha.toLowerCase().includes(searchTerm) || 
-                    word.espanol.toLowerCase().includes(searchTerm)
-                );
-            }
+            if (activeCategory && activeCategory !== 'Mostrar todo') { filteredWords = filteredWords.filter(word => word.categoria === activeCategory); }
+            if (searchTerm) { filteredWords = filteredWords.filter(word => word.purhepecha.toLowerCase().includes(searchTerm) || word.espanol.toLowerCase().includes(searchTerm)); }
             renderWords(filteredWords);
         }
 
@@ -404,34 +230,24 @@
         categoryFilters.addEventListener('click', (e) => {
             if (e.target.classList.contains('category-btn')) {
                 const isAlreadyActive = e.target.classList.contains('active');
-
                 if (isAlreadyActive) {
-                    // --- CLOSE the currently active list ---
                     e.target.classList.remove('active');
-
-                    // Start the fade-out animation
                     resultsContainer.classList.remove('opacity-100', 'scale-100');
                     resultsContainer.classList.add('opacity-0', 'scale-95');
-                    
-                    // After the animation finishes, hide the container and show the prompt
-                    setTimeout(() => {
-                        resultsContainer.classList.add('hidden');
-                        initialPrompt.classList.remove('hidden');
-                    }, 300); // Match CSS transition duration
-
+                    setTimeout(() => { 
+                        resultsContainer.classList.add('hidden'); 
+                        initialPrompt.classList.remove('hidden'); 
+                    }, 300);
                 } else {
-                    // --- OPEN a new list ---
                     document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
                     e.target.classList.add('active');
-
                     initialPrompt.classList.add('hidden');
                     filterAndRender();
-
-                    // Prepare the container for animation
-                    resultsContainer.classList.remove('hidden');
-                    resultsContainer.classList.add('opacity-0', 'scale-95');
                     
-                    // Use a tiny delay to ensure the browser applies the initial state before animating
+                    // Make element part of layout but keep it invisible for the transition's start state
+                    resultsContainer.classList.remove('hidden');
+                    
+                    // In the next frame, trigger the transition to the visible state
                     requestAnimationFrame(() => {
                         resultsContainer.classList.remove('opacity-0', 'scale-95');
                         resultsContainer.classList.add('opacity-100', 'scale-100');
@@ -442,35 +258,14 @@
 
         resultsContainer.addEventListener('click', (e) => {
             const playButton = e.target.closest('.play-btn');
-            if (playButton) {
-                e.stopPropagation(); // Evita que se abra el modal al hacer clic en el botón de play
-                const audioSrc = playButton.dataset.audioSrc;
-                playAudio(audioSrc, playButton);
-                return;
-            }
-            
+            if (playButton) { e.stopPropagation(); playAudio(playButton.dataset.audioSrc, playButton); return; }
             const cardBody = e.target.closest('[data-index]');
-            if (cardBody) {
-                const index = cardBody.dataset.index;
-                openModal(index);
-            }
+            if (cardBody) { openModal(cardBody.dataset.index); }
         });
         
-        detailsModal.addEventListener('click', (e) => {
-            if (e.target === detailsModal) {
-                closeModal();
-            }
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === "Escape" && !detailsModal.classList.contains('hidden')) {
-                closeModal();
-            }
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            renderCategories();
-        });
+        detailsModal.addEventListener('click', (e) => { if (e.target === detailsModal) { closeModal(); } });
+        document.addEventListener('keydown', (e) => { if (e.key === "Escape" && !detailsModal.classList.contains('hidden')) { closeModal(); } });
+        document.addEventListener('DOMContentLoaded', () => { renderCategories(); });
     </script>
 </body>
 </html>
