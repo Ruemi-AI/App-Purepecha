@@ -80,8 +80,7 @@
 
     <script>
         // ===================================================================================
-        // PASO 1: CONFIGURACIÓN
-        // Reemplaza estas cadenas vacías con tus propias credenciales de Google Cloud.
+        // Reemplazar con credenciales de Google Cloud.
         // ===================================================================================
         const API_KEY = 'PEGAR_API_KEY_DE_GOOGLE_CLOUD';
         const MODEL_ID = 'PEGAR_EL_ID_DEL_MODELO_ENTRENADO';
@@ -187,9 +186,8 @@
                         encoding: 'WEBM_OPUS', // MediaRecorder en muchos navegadores usa este formato
                         sampleRateHertz: 48000, // Común para MediaRecorder, ajústalo si es necesario
                         languageCode: 'es-MX',
-                        model: MODEL_ID, // ¡Aquí usamos nuestro modelo personalizado!
-                        // "adaptation" es otra forma de pasar el modelo
-                        // adaptation: { phraseSets: [{ phrases: dictionary.map(d => ({ value: d.purhepecha })) }] }
+                        model: MODEL_ID, // Se usa modelo personalizado
+                        
                     },
                     audio: { content: base64Audio },
                 };
@@ -228,8 +226,7 @@
             };
         }
 
-        // --- El resto de las funciones (renderWords, renderCategories, filterAndRender, etc.) son las mismas ---
-        // Se omiten por brevedad, pero estarían aquí en el archivo real.
+        // --- Resto de funciones (renderWords, renderCategories, filterAndRender, etc.) 
         const detailsModal = document.getElementById('detailsModal');
         const modalContent = document.getElementById('modalContent');
         const audioError = document.getElementById('audioError');
@@ -344,3 +341,4 @@
     </script>
 </body>
 </html>
+
