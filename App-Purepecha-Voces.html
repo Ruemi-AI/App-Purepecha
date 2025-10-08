@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device--width, initial-scale=1.0">
+    
+    <title>Jorhenguarhikua P'urhépecha (API)</title>
+    <meta name="description" content="Guía interactiva de P'urhépecha con reconocimiento de voz personalizado.">
+    <meta name="theme-color" content="#0d9488"/>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="images/icons/icon-192x192.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #e2e8f0; }
+        ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 8px; }
+        .category-btn.active { background-color: #0d9488; color: white; border-color: #0d9488; }
+        .play-btn svg.playing-icon { display: none; }
+        .play-btn.playing svg.play-icon { display: none; }
+        .play-btn.playing svg.playing-icon { display: block; }
+        .modal-container { transition: opacity 0.3s ease; }
+        .modal-content { transition: transform 0.3s ease; }
+        #resultsContainer { transition: opacity 0.3s ease, transform 0.3s ease; }
+        #micButton.listening {
+            background-color: #f04438; border-color: #d92d20; animation: pulse 1.5s infinite;
+        }
+        #micButton.listening svg { color: white; }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(240, 68, 56, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(240, 68, 56, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(240, 68, 56, 0); }
+        }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <div class="container mx-auto max-w-3xl p-4 sm:p-6 min-h-screen flex flex-col">
+        <!-- Encabezado -->
+        <header class="text-center my-8">
+            <h1 class="text-4xl sm:text-5xl font-bold text-teal-700 tracking-tight">Jorhenguarhikua P'urhépecha</h1>
+            <p class="text-lg text-slate-500 mt-3">Guía con Reconocimiento de Voz Personalizado</p>
+        </header>
+
+        <!-- Barra de Búsqueda y Reconocimiento de Voz -->
+        <div class="mb-8">
+            <div class="flex items-center gap-2 sm:gap-3">
+                <div class="relative flex-grow">
+                    <input type="text" id="searchInput" placeholder="Buscar o presiona el micrófono para hablar..."
+                           class="w-full pl-4 pr-4 py-3 border border-slate-300 rounded-full bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition">
+                </div>
+                <button id="micButton" title="Buscar por voz" class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-white border border-slate-300 shadow-sm hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-all">
+                    <svg class="w-6 h-6 text-slate-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75h-.008a.75.75 0 01-.75-.75v-.008a.75.75 0 01.75-.75zM12 15a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75h-.008a.75.75 0 01-.75-.75v-.008a.75.75 0 01.75-.75zM12 6.75a.75.75 0 01.75.75v6a.75.75 0 01-1.5 0v-6a.75.75 0 01.75-.75zM9 9.75a.75.75 0 01.75.75v2.5a.75.75 0 01-1.5 0v-2.5a.75.75 0 01.75-.75zM15 9.75a.75.75 0 01.75.75v2.5a.75.75 0 01-1.5 0v-2.5a.75.75 0 01.75-.75z" /><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 21v-2.625a3.375 3.375 0 013.375-3.375h1.5A3.375 3.375 0 0118 18.375V21" /></svg>
+                </button>
+            </div>
+            <p id="micStatus" class="text-center text-sm text-slate-500 mt-2 h-5 transition-opacity"></p>
+        </div>
+
+        <!-- Filtros por Categoría -->
+        <div id="categoryFilters" class="mb-8 flex flex-wrap justify-center gap-2 sm:gap-3"></div>
+
+        <!-- Contenedor de Resultados -->
+        <main class="flex-grow flex flex-col items-center">
+            <div id="initialPrompt" class="text-center text-slate-500 my-auto">
+                <h3 class="mt-2 text-lg font-medium text-slate-700">Explora el vocabulario</h3>
+                <p class="mt-1 text-sm">Selecciona una categoría para comenzar.</p>
+            </div>
+            <div id="resultsContainer" class="w-full space-y-3 hidden opacity-0 scale-95"></div>
+        </main>
+    </div>
+    
+    <!-- Resto del HTML (Modal, Notificaciones) es el mismo... -->
+    <div id="detailsModal" class="modal-container fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden opacity-0"><div id="modalContent" class="modal-content bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 transform scale-95"></div></div>
+    <div id="audioError" class="fixed bottom-5 right-5 bg-red-600 text-white px-6 py-3 rounded-lg shadow-xl hidden transition-opacity duration-300" role="alert"><p id="audioErrorFile"></p></div>
+
+
+    <script>
+        // ===================================================================================
+        // PASO 1: CONFIGURACIÓN
+        // Reemplaza estas cadenas vacías con tus propias credenciales de Google Cloud.
+        // ===================================================================================
+        const API_KEY = 'PEGA_TU_API_KEY_DE_GOOGLE_CLOUD_AQUI';
+        const MODEL_ID = 'PEGA_EL_ID_DE_TU_MODELO_ENTRENADO_AQUI';
+        // ===================================================================================
+
+        const dictionary = [ 
+            // Saludos
+            { purhepecha: 'Nájki, ¿nómbe úsï?', espanol: 'Hola, ¿cómo estás?', categoria: 'Saludos', audioSrc: 'audio/najki_nombe_usi.mp3', uso: "Es el saludo más común e informal.", ejemplos: [{ purhepecha: "Nájki, ¿nómbe úsï tata?", espanol: "Hola, ¿cómo está señor?" }] },
+            { purhepecha: 'Jorhenguarhikua', espanol: 'Gracias (formal)', categoria: 'Saludos', audioSrc: 'audio/jorhenguarhikua.mp3' },
+            { purhepecha: 'Diósï meiámukia', espanol: 'Gracias', categoria: 'Saludos', audioSrc: 'audio/diosi_meiamukia.mp3' },
+            { purhepecha: 'Nári eransku', espanol: 'Buenos días', categoria: 'Saludos', audioSrc: 'audio/nari_eransku.mp3' },
+            { purhepecha: 'Nári chusku', espanol: 'Buenas tardes', categoria: 'Saludos', audioSrc: 'audio/nari_chusku.mp3' },
+            { purhepecha: 'Nári churesku', espanol: 'Buenas noches', categoria: 'Saludos', audioSrc: 'audio/nari_churesku.mp3' },
+            { purhepecha: 'Tatsekuarhia', espanol: 'Adiós', categoria: 'Saludos', audioSrc: 'audio/tatsekuarhia.mp3' },
+            { purhepecha: 'Nipa', espanol: 'Adiós (informal)', categoria: 'Saludos', audioSrc: 'audio/nipa.mp3' },
+            
+            // Frases
+            { purhepecha: '¿Nómbe jirejtki?', espanol: '¿Cómo te llamas?', categoria: 'Frases', audioSrc: 'audio/nombe_jirejtki.mp3' },
+            { purhepecha: 'Juchiti anapu jirej...', espanol: 'Mi nombre es...', categoria: 'Frases', audioSrc: 'audio/juchiti_anapu_jirej.mp3' },
+            { purhepecha: '¿Nómbe anapueski?', espanol: '¿De dónde eres?', categoria: 'Frases', audioSrc: 'audio/nombe_anapueski.mp3' },
+            { purhepecha: '¿Nómbe xáni?', espanol: '¿Cuánto cuesta?', categoria: 'Frases', audioSrc: 'audio/nombe_xani.mp3' },
+            { purhepecha: 'Ásï jantontskani', espanol: 'Vamos a comer', categoria: 'Frases', audioSrc: 'audio/asi_jantontskani.mp3' },
+            
+            // Números
+            { purhepecha: 'Ma', espanol: 'Uno', categoria: 'Números', audioSrc: 'audio/ma.mp3' },
+            { purhepecha: 'Tsimani', espanol: 'Dos', categoria: 'Números', audioSrc: 'audio/tsimani.mp3' },
+            { purhepecha: 'Tanimo', espanol: 'Tres', categoria: 'Números', audioSrc: 'audio/tanimo.mp3' },
+            { purhepecha: "T'ámu", espanol: 'Cuatro', categoria: 'Números', audioSrc: 'audio/tamu.mp3' },
+            { purhepecha: 'Iúmu', espanol: 'Cinco', categoria: 'Números', audioSrc: 'audio/iumu.mp3' },
+            
+            // Familia
+            { purhepecha: 'Nana', espanol: 'Mamá', categoria: 'Familia', audioSrc: 'audio/nana.mp3', imageSrc: 'images/nana.jpg' },
+            { purhepecha: 'Tata', espanol: 'Papá', categoria: 'Familia', audioSrc: 'audio/tata.mp3', imageSrc: 'images/tata.jpg' },
+            
+            // Comida
+            { purhepecha: 'Kurucha', espanol: 'Pescado', categoria: 'Comida', audioSrc: 'audio/kurucha.mp3', imageSrc: 'images/kurucha.jpg', uso: "Se refiere al pescado en general.", cultural: "El pescado es fundamental en la gastronomía de la zona del Lago de Pátzcuaro." },
+            { purhepecha: 'Corunda', espanol: 'Corunda (platillo)', categoria: 'Comida', audioSrc: 'audio/corunda.mp3', imageSrc: 'images/corunda.jpg', uso: "Es un tamal de masa de maíz, de forma triangular.", cultural: "Las corundas son un platillo ceremonial y festivo en Michoacán.", ejemplos: [{ purhepecha: "Juchari nana sesi corundas arhisïndi.", espanol: "Mi mamá hace unas corundas muy ricas." }] },
+            
+            // Animales
+            { purhepecha: 'Uitsïki', espanol: 'Colibrí', categoria: 'Animales', audioSrc: 'audio/uitsiki.mp3', imageSrc: 'images/uitsiki.jpg', pronunciacion: "La 'ts' suena similar a la 'z' en algunas regiones de España.", cultural: "En la mitología P'urhépecha, el colibrí era un mensajero de los dioses." },
+            
+            // Emergencia
+            { purhepecha: 'Chélikua', espanol: 'Peligro', categoria: 'Emergencia', audioSrc: 'audio/chelikua.mp3' },
+            { purhepecha: 'Jarhuatarini', espanol: 'Auxilio (pedir ayuda)', categoria: 'Emergencia', audioSrc: 'audio/jarhuatarini.mp3' },
+            { purhepecha: 'Jarhuajpikua', espanol: 'Ayuda', categoria: 'Emergencia', audioSrc: 'audio/jarhuajpikua.mp3' },
+
+            // Básicos
+            { purhepecha: 'Bañolu', espanol: 'Baño', categoria: 'Básicos', audioSrc: 'audio/banolu.mp3' },
+            { purhepecha: 'Itsï', espanol: 'Agua', categoria: 'Básicos', audioSrc: 'audio/itsi.mp3', imageSrc: 'images/itsi.jpg' },
+            { purhepecha: 'Akua', espanol: 'Comida', categoria: 'Básicos', audioSrc: 'audio/akua.mp3', imageSrc: 'images/akua.jpg' },
+            { purhepecha: 'T\'irekua', espanol: 'Comida (el acto de comer)', categoria: 'Básicos', audioSrc: 'audio/tirekua.mp3' },
+
+            // Respuestas
+            { purhepecha: 'Jo', espanol: 'Sí', categoria: 'Respuestas', audioSrc: 'audio/jo.mp3' },
+            { purhepecha: 'Nómbe', espanol: 'No', categoria: 'Respuestas', audioSrc: 'audio/nombe.mp3' },
+            { purhepecha: 'Sési', espanol: 'Bien', categoria: 'Respuestas', audioSrc: 'audio/sesi.mp3' },
+
+            // Acciones
+            { purhepecha: 'Nóteru', espanol: 'Cancelar (ya no)', categoria: 'Acciones', audioSrc: 'audio/noteru.mp3' },
+            { purhepecha: 'Kétsini', espanol: 'Bajar', categoria: 'Acciones', audioSrc: 'audio/ketsini.mp3' },
+            { purhepecha: 'Karharani', espanol: 'Subir', categoria: 'Acciones', audioSrc: 'audio/karharani.mp3' },
+            { purhepecha: 'Xanharani', espanol: 'Avanzar (caminar)', categoria: 'Acciones', audioSrc: 'audio/xanharani.mp3' },
+            { purhepecha: 'Uénan', espanol: 'Iniciar', categoria: 'Acciones', audioSrc: 'audio/uenan.mp3' },
+            { purhepecha: 'Chúxapani', espanol: 'Siga (seguir)', categoria: 'Acciones', audioSrc: 'audio/chuxapani.mp3' },
+            { purhepecha: 'Anhaxutani', espanol: 'Detener', categoria: 'Acciones', audioSrc: 'audio/anhaxutani.mp3' },
+            { purhepecha: 'Anhaxurhini', espanol: 'Parar', categoria: 'Acciones', audioSrc: 'audio/anhaxurhini.mp3' },
+
+            // Direcciones
+            { purhepecha: 'Jurhíjkandani', espanol: 'Derecha', categoria: 'Direcciones', audioSrc: 'audio/jurhijkandani.mp3' },
+            { purhepecha: 'Uikixkandani', espanol: 'Izquierda', categoria: 'Direcciones', audioSrc: 'audio/uikixkandani.mp3' },
+            { purhepecha: 'Uikix', espanol: 'Izquierda (corto)', categoria: 'Direcciones', audioSrc: 'audio/uikix.mp3' },
+            { purhepecha: 'Tátsipani', espanol: 'Atrás', categoria: 'Direcciones', audioSrc: 'audio/tatsipani.mp3' },
+            { purhepecha: 'Orhepani', espanol: 'Adelante', categoria: 'Direcciones', audioSrc: 'audio/orhepani.mp3' },
+
+            // Adjetivos
+            { purhepecha: 'Iótani', espanol: 'Alto (altura)', categoria: 'Adjetivos', audioSrc: 'audio/iotani.mp3' },
+            { purhepecha: "K'éri", espanol: 'Grande', categoria: 'Adjetivos', audioSrc: 'audio/keri.mp3' },
+            { purhepecha: 'Sési jásï', espanol: 'Está muy bonito / a', categoria: 'Adjetivos', audioSrc: 'audio/sesi_jasi.mp3' },
+            
+            // Sentimientos
+            { purhepecha: 'Uékperakua', espanol: 'Amor', categoria: 'Sentimientos', audioSrc: 'audio/uekperakua.mp3' },
+            { purhepecha: 'Uékasïnga', espanol: 'Te quiero / Te amo', categoria: 'Sentimientos', audioSrc: 'audio/uekasinga.mp3' },
+        ];
+
+
+        // --- Selectores de Elementos ---
+        const searchInput = document.getElementById('searchInput');
+        const categoryFilters = document.getElementById('categoryFilters');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const initialPrompt = document.getElementById('initialPrompt');
+        const micButton = document.getElementById('micButton');
+        const micStatus = document.getElementById('micStatus');
+        
+        let mediaRecorder;
+        let audioChunks = [];
+        let isRecording = false;
+
+        // --- Lógica de Grabación de Audio ---
+        micButton.addEventListener('click', async () => {
+            if (isRecording) {
+                mediaRecorder.stop();
+                isRecording = false;
+                micButton.classList.remove('listening');
+                micStatus.textContent = 'Procesando...';
+                return;
+            }
+
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                micStatus.textContent = 'Tu navegador no soporta la grabación de audio.';
+                return;
+            }
+            if (API_KEY === 'PEGA_TU_API_KEY_DE_GOOGLE_CLOUD_AQUI' || MODEL_ID === 'PEGA_EL_ID_DE_TU_MODELO_ENTRENADO_AQUI') {
+                micStatus.textContent = 'Error: API Key o Model ID no configurados.';
+                return;
+            }
+
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                isRecording = true;
+                micButton.classList.add('listening');
+                micStatus.textContent = 'Grabando... (presiona de nuevo para detener)';
+                
+                mediaRecorder = new MediaRecorder(stream);
+                mediaRecorder.start();
+
+                mediaRecorder.ondataavailable = event => {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    reconocerVozConModeloPersonalizado(audioBlob);
+                    audioChunks = [];
+                    stream.getTracks().forEach(track => track.stop()); // Detener el acceso al micrófono
+                };
+            } catch (err) {
+                console.error('Error al acceder al micrófono:', err);
+                micStatus.textContent = 'Error: No se pudo acceder al micrófono.';
+                isRecording = false;
+                micButton.classList.remove('listening');
+            }
+        });
+
+        // --- Lógica de API de Google Cloud ---
+        async function reconocerVozConModeloPersonalizado(audioBlob) {
+            const url = `https://speech.googleapis.com/v1p1beta1/speech:recognize?key=${API_KEY}`;
+
+            // Convertir el audio a Base64
+            const reader = new FileReader();
+            reader.readAsDataURL(audioBlob);
+            reader.onloadend = async () => {
+                const base64Audio = reader.result.split(',')[1];
+
+                const requestBody = {
+                    config: {
+                        encoding: 'WEBM_OPUS', // MediaRecorder en muchos navegadores usa este formato
+                        sampleRateHertz: 48000, // Común para MediaRecorder, ajústalo si es necesario
+                        languageCode: 'es-MX',
+                        model: MODEL_ID, // ¡Aquí usamos nuestro modelo personalizado!
+                    },
+                    audio: { content: base64Audio },
+                };
+
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        body: JSON.stringify(requestBody),
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`Error de la API: ${response.statusText}`);
+                    }
+
+                    const data = await response.json();
+                    
+                    if (data.results && data.results.length > 0) {
+                        const transcripcion = data.results[0].alternatives[0].transcript;
+                        micStatus.textContent = `Reconocido: "${transcripcion}"`;
+                        searchInput.value = transcripcion;
+                        
+                        // Activa el filtro para mostrar el resultado
+                        const mostrarTodoBtn = document.querySelector('.category-btn[data-category="Mostrar todo"]');
+                        if (mostrarTodoBtn) mostrarTodoBtn.click();
+                        else filterAndRender();
+
+                    } else {
+                        micStatus.textContent = 'No se pudo reconocer la palabra. Inténtalo de nuevo.';
+                    }
+                } catch (error) {
+                    console.error('Error al contactar la API de Speech-to-Text:', error);
+                    micStatus.textContent = 'Error al procesar el audio.';
+                } finally {
+                    setTimeout(() => micStatus.textContent = '', 4000);
+                }
+            };
+        }
+
+        const detailsModal = document.getElementById('detailsModal');
+        const modalContent = document.getElementById('modalContent');
+        const audioError = document.getElementById('audioError');
+        const audioErrorFile = document.getElementById('audioErrorFile');
+        let currentAudio = null;
+        let currentlyPlayingButton = null;
+
+        function playAudio(src, buttonElement) {
+            if (!src) return;
+            if (currentAudio) {
+                currentAudio.pause();
+                if (currentlyPlayingButton) currentlyPlayingButton.classList.remove('playing');
+            }
+            if (currentlyPlayingButton === buttonElement) {
+                currentAudio = null;
+                currentlyPlayingButton = null;
+                return;
+            }
+            currentAudio = new Audio(src);
+            currentlyPlayingButton = buttonElement;
+            buttonElement.classList.add('playing');
+            currentAudio.play().catch(error => {
+                audioErrorFile.textContent = `No se encontró: "${src.split('/').pop()}"`;
+                audioError.classList.remove('hidden');
+                setTimeout(() => { audioError.classList.add('hidden'); }, 4000);
+                buttonElement.classList.remove('playing');
+                currentAudio = null;
+                currentlyPlayingButton = null;
+            });
+            currentAudio.onended = () => {
+                buttonElement.classList.remove('playing');
+                currentAudio = null;
+                currentlyPlayingButton = null;
+            }
+        }
+        function openModal(index) {
+            const item = dictionary[parseInt(index)];
+            if (!item) return;
+            let contentHtml = `<div class="flex justify-between items-start"><di> <h2 class="text-3xl font-bold text-teal-800">${item.purhepecha}</h2> <p class="text-xl text-slate-600 mt-1">${item.espanol}</p></div> <button id="closeModalBtn" class="p-2 rounded-full hover:bg-slate-200"><svg class="w-6 h-6 text-slate-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button></div>`;
+            if (item.imageSrc) { contentHtml += `<img src="${item.imageSrc}" alt="${item.espanol}" class="w-full h-48 object-cover rounded-xl mt-4 mb-6" onerror="this.style.display='none'">`; } else { contentHtml += '<hr class="my-6">'; }
+            if (item.pronunciacion) { contentHtml += `<div class="mb-4"><h3 class="font-bold text-lg text-slate-800">Pronunciación</h3><p class="text-slate-600">${item.pronunciacion}</p></div>`; }
+            if (item.uso) { contentHtml += `<div class="mb-4"><h3 class="font-bold text-lg text-slate-800">Notas de Uso</h3><p class="text-slate-600">${item.uso}</p></div>`; }
+            if (item.ejemplos && item.ejemplos.length > 0) { contentHtml += `<div class="mb-4"><h3 class="font-bold text-lg text-slate-800">Ejemplos</h3><ul class="list-disc list-inside space-y-2 mt-2 pl-2">${item.ejemplos.map(e => `<li><span class="text-slate-700 font-medium">${e.purhepecha}</span><br><span class="text-slate-500 text-sm pl-4">${e.espanol}</span></li>`).join('')}</ul></div>`; }
+            if (item.cultural) { contentHtml += `<div class="mb-4 bg-teal-50 border-l-4 border-teal-500 p-4 rounded-r-lg"><h3 class="font-bold text-lg text-teal-900">Contexto Cultural</h3><p class="text-teal-800">${item.cultural}</p></div>`; }
+            modalContent.innerHTML = contentHtml;
+            detailsModal.classList.remove('hidden');
+            setTimeout(() => { detailsModal.classList.remove('opacity-0'); modalContent.classList.remove('scale-95'); }, 10);
+            document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+        }
+        function closeModal() {
+            detailsModal.classList.add('opacity-0');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => { detailsModal.classList.add('hidden'); }, 300);
+        }
+        function renderWords(wordArray) {
+            resultsContainer.innerHTML = '';
+            if (wordArray.length === 0) { resultsContainer.innerHTML = `<div class="text-center py-10 px-4"><h3 class="mt-2 text-lg font-medium text-slate-900">Sin resultados</h3><p class="mt-1 text-sm text-slate-500">No se encontraron resultados.</p></div>`; return; }
+            wordArray.forEach((word) => {
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-xl shadow-md border border-slate-200 flex items-center justify-between transition-shadow hover:shadow-lg';
+                const imageHtml = word.imageSrc ? `<img src="${word.imageSrc}" alt="${word.espanol}" class="w-16 h-16 object-cover rounded-l-lg mr-4 flex-shrink-0" onerror="this.style.display='none';">` : '<div class="w-4"></div>';
+                card.innerHTML = `<div class="flex items-center flex-grow min-w-0 cursor-pointer" data-index="${word.originalIndex}"><div class="flex items-center flex-grow min-w-0">${imageHtml}<div class="min-w-0 py-4"><p class="font-semibold text-lg text-teal-800 truncate">${word.purhepecha}</p><p class="text-slate-600 truncate">${word.espanol}</p></div></div></div><div class="px-4"><button class="play-btn flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-teal-50 hover:bg-teal-100 active:bg-teal-200" data-audio-src="${word.audioSrc}"><svg class="play-icon w-6 h-6 text-teal-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 11.632a.75.75 0 010 1.236l-6 3.75a.75.75 0 01-1.114-.618V8.484a.75.75 0 011.114-.618l6 3.75z" /><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5a.75.75 0 00-.75.75v13.5a.75.75 0 001.5 0V5.25A.75.75 0 008.25 4.5z" /></svg><svg class="playing-icon w-6 h-6 text-teal-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 9l10.5-3m0 6.553v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 11-.99-3.467l2.31-.66a2.25 2.25 0 001.632-2.163zm0 0V2.25L9 5.25v10.303m0 0v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 01-.99-3.467l2.31-.66A2.25 2.25 0 009 15.553z" /></svg></button></div>`;
+                resultsContainer.appendChild(card);
+            });
+        }
+        function renderCategories() {
+            const categories = ['Mostrar todo', ...new Set(dictionary.map(item => item.categoria))];
+            categoryFilters.innerHTML = ''; // Limpiar filtros antes de renderizar
+            categories.forEach(category => {
+                const button = document.createElement('button');
+                button.className = 'category-btn px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-full hover:bg-slate-100';
+                button.textContent = category; button.dataset.category = category;
+                categoryFilters.appendChild(button);
+            });
+        }
+        function filterAndRender() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const activeCategory = document.querySelector('.category-btn.active')?.dataset.category;
+            let indexedDictionary = dictionary.map((word, index) => ({...word, originalIndex: index}));
+            let filteredWords = indexedDictionary;
+            if (activeCategory && activeCategory !== 'Mostrar todo') { filteredWords = filteredWords.filter(word => word.categoria === activeCategory); }
+            if (searchTerm) { filteredWords = filteredWords.filter(word => word.purhepecha.toLowerCase().includes(searchTerm) || word.espanol.toLowerCase().includes(searchTerm)); }
+            renderWords(filteredWords);
+        }
+        searchInput.addEventListener('input', filterAndRender);
+        categoryFilters.addEventListener('click', (e) => {
+            if (e.target.classList.contains('category-btn')) {
+                const isAlreadyActive = e.target.classList.contains('active');
+                if (isAlreadyActive) {
+                    e.target.classList.remove('active');
+                    resultsContainer.classList.remove('opacity-100', 'scale-100');
+                    resultsContainer.classList.add('opacity-0', 'scale-95');
+                    setTimeout(() => { resultsContainer.classList.add('hidden'); initialPrompt.classList.remove('hidden'); }, 300);
+                } else {
+                    document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+                    initialPrompt.classList.add('hidden');
+                    filterAndRender();
+                    resultsContainer.classList.remove('hidden');
+                    requestAnimationFrame(() => { resultsContainer.classList.remove('opacity-0', 'scale-95'); resultsContainer.classList.add('opacity-100', 'scale-100'); });
+                }
+            }
+        });
+        resultsContainer.addEventListener('click', (e) => {
+            const playButton = e.target.closest('.play-btn');
+            if (playButton) { e.stopPropagation(); playAudio(playButton.dataset.audioSrc, playButton); return; }
+            const cardBody = e.target.closest('[data-index]');
+            if (cardBody) { openModal(cardBody.dataset.index); }
+        });
+        detailsModal.addEventListener('click', (e) => { if (e.target === detailsModal) { closeModal(); } });
+        document.addEventListener('keydown', (e) => { if (e.key === "Escape" && !detailsModal.classList.contains('hidden')) { closeModal(); } });
+        document.addEventListener('DOMContentLoaded', () => { renderCategories(); });
+    </script>
+</body>
+</html>
+
