@@ -73,7 +73,7 @@
         </main>
     </div>
     
-    <!-- Resto del HTML (Modal, Notificaciones) es el mismo... -->
+    <!-- Resto del HTML (Modal, Notificaciones) -->
     <div id="detailsModal" class="modal-container fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden opacity-0"><div id="modalContent" class="modal-content bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 transform scale-95"></div></div>
     <div id="audioError" class="fixed bottom-5 right-5 bg-red-600 text-white px-6 py-3 rounded-lg shadow-xl hidden transition-opacity duration-300" role="alert"><p id="audioErrorFile"></p></div>
 
@@ -81,10 +81,9 @@
     <script>
         // ===================================================================================
         // PASO 1: CONFIGURACIÓN
-        // Reemplaza estas cadenas vacías con tus propias credenciales de Google Cloud.
-        // ===================================================================================
-        const API_KEY = 'PEGA_TU_API_KEY_DE_GOOGLE_CLOUD_AQUI';
-        const MODEL_ID = 'PEGA_EL_ID_DE_TU_MODELO_ENTRENADO_AQUI';
+        // ==================================================================================
+        const API_KEY = 'PEGAR_API_KEY_DE_GOOGLE_CLOUD';
+        const MODEL_ID = 'PEGAR_EL_ID_DEL_MODELO_ENTRENADO';
         // ===================================================================================
 
         const dictionary = [ 
@@ -193,7 +192,7 @@
                 micStatus.textContent = 'Tu navegador no soporta la grabación de audio.';
                 return;
             }
-            if (API_KEY === 'PEGA_TU_API_KEY_DE_GOOGLE_CLOUD_AQUI' || MODEL_ID === 'PEGA_EL_ID_DE_TU_MODELO_ENTRENADO_AQUI') {
+            if (API_KEY === 'PEGA_TU_API_KEY_DE_GOOGLE_CLOUD_AQUI' || MODEL_ID === 'PEGAR_EL_ID_DEL_MODELO_ENTRENADO') {
                 micStatus.textContent = 'Error: API Key o Model ID no configurados.';
                 return;
             }
@@ -237,10 +236,10 @@
 
                 const requestBody = {
                     config: {
-                        encoding: 'WEBM_OPUS', // MediaRecorder en muchos navegadores usa este formato
-                        sampleRateHertz: 48000, // Común para MediaRecorder, ajústalo si es necesario
+                        encoding: 'WEBM_OPUS', 
+                        sampleRateHertz: 48000, 
                         languageCode: 'es-MX',
-                        model: MODEL_ID, // ¡Aquí usamos nuestro modelo personalizado!
+                        model: MODEL_ID, 
                     },
                     audio: { content: base64Audio },
                 };
@@ -394,4 +393,5 @@
     </script>
 </body>
 </html>
+
 
