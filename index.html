@@ -321,11 +321,12 @@
                     micStatus.textContent = "¡Audio procesado! (Ver consola para detalles)";
                     
                 } catch (error) {
-                    console.error("Error en Vertex AI:", error);
-                    micStatus.textContent = "Error al conectar con el modelo.";
-                }
-            };
+            console.error("Error en Vertex AI:", error);
+            // ESTA LÍNEA ES NUEVA: Muestra el error técnico en pantalla
+            micStatus.textContent = "Error: " + error.message;
         }
+    };
+}
 
         // --- Lógica de Grabación del Micrófono ---
         let isRecording = false;
@@ -696,4 +697,5 @@
     </script>
 </body>
 </html>
+
 
