@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device--width, initial-scale=1.0">
-    
-    <title>Jorhenguarhikua P'urhépecha (API)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Jorhenguarhikua P'urhépecha</title>
     <meta name="description" content="Guía interactiva de P'urhépecha con reconocimiento de voz personalizado.">
-    <meta name="theme-color" content="#0d9488"/>
+    <meta name="theme-color" content="#0d9488" />
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="images/icons/icon-192x192.png">
 
@@ -35,8 +36,11 @@
             70% { box-shadow: 0 0 0 10px rgba(240, 68, 56, 0); }
             100% { box-shadow: 0 0 0 0 rgba(240, 68, 56, 0); }
         }
+        /* Estilos para el memorama */
+        .volteada { background-color: #e2e8f0 !important; cursor: default; }
     </style>
 </head>
+
 <body class="text-slate-800">
 
     <div class="container mx-auto max-w-3xl p-4 sm:p-6 min-h-screen flex flex-col">
@@ -46,15 +50,29 @@
             <p class="text-lg text-slate-500 mt-3">Guía con Reconocimiento de Voz Personalizado</p>
         </header>
 
+        <!-- Botón de juegos -->
+        <div class="text-center mb-6">
+            <button id="juegosBtn" class="px-6 py-3 bg-teal-600 text-white font-semibold rounded-full shadow hover:bg-teal-700 transition-colors">
+                🎮 Juegos
+            </button>
+        </div>
+
         <!-- Barra de Búsqueda y Reconocimiento de Voz -->
-        <div class="mb-8">
+        <div id="searchSection" class="mb-8">
             <div class="flex items-center gap-2 sm:gap-3">
                 <div class="relative flex-grow">
                     <input type="text" id="searchInput" placeholder="Buscar o presiona el micrófono para hablar..."
-                           class="w-full pl-4 pr-4 py-3 border border-slate-300 rounded-full bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition">
+                        class="w-full pl-4 pr-4 py-3 border border-slate-300 rounded-full bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition">
                 </div>
-                <button id="micButton" title="Buscar por voz" class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-white border border-slate-300 shadow-sm hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-all">
-                    <svg class="w-6 h-6 text-slate-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75h-.008a.75.75 0 01-.75-.75v-.008a.75.75 0 01.75-.75zM12 15a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75h-.008a.75.75 0 01-.75-.75v-.008a.75.75 0 01.75-.75zM12 6.75a.75.75 0 01.75.75v6a.75.75 0 01-1.5 0v-6a.75.75 0 01.75-.75zM9 9.75a.75.75 0 01.75.75v2.5a.75.75 0 01-1.5 0v-2.5a.75.75 0 01.75-.75zM15 9.75a.75.75 0 01.75.75v2.5a.75.75 0 01-1.5 0v-2.5a.75.75 0 01.75-.75z" /><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 21v-2.625a3.375 3.375 0 013.375-3.375h1.5A3.375 3.375 0 0118 18.375V21" /></svg>
+                <button id="micButton" title="Buscar por voz"
+                    class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-white border border-slate-300 shadow-sm hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-all">
+                    <svg class="w-6 h-6 text-slate-600" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 18.75a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75h-.008a.75.75 0 01-.75-.75v-.008a.75.75 0 01.75-.75zM12 15a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75h-.008a.75.75 0 01-.75-.75v-.008a.75.75 0 01.75-.75zM12 6.75a.75.75 0 01.75.75v6a.75.75 0 01-1.5 0v-6a.75.75 0 01.75-.75zM9 9.75a.75.75 0 01.75.75v2.5a.75.75 0 01-1.5 0v-2.5a.75.75 0 01.75-.75zM15 9.75a.75.75 0 01.75.75v2.5a.75.75 0 01-1.5 0v-2.5a.75.75 0 01.75-.75z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9.75 21v-2.625a3.375 3.375 0 013.375-3.375h1.5A3.375 3.375 0 0118 18.375V21" />
+                    </svg>
                 </button>
             </div>
             <p id="micStatus" class="text-center text-sm text-slate-500 mt-2 h-5 transition-opacity"></p>
@@ -64,228 +82,295 @@
         <div id="categoryFilters" class="mb-8 flex flex-wrap justify-center gap-2 sm:gap-3"></div>
 
         <!-- Contenedor de Resultados -->
-        <main class="flex-grow flex flex-col items-center">
+        <main id="mainContent" class="flex-grow flex flex-col items-center">
             <div id="initialPrompt" class="text-center text-slate-500 my-auto">
                 <h3 class="mt-2 text-lg font-medium text-slate-700">Explora el vocabulario</h3>
                 <p class="mt-1 text-sm">Selecciona una categoría para comenzar.</p>
             </div>
             <div id="resultsContainer" class="w-full space-y-3 hidden opacity-0 scale-95"></div>
         </main>
-    </div>
-    
-    <!-- Resto del HTML (Modal, Notificaciones) -->
-    <div id="detailsModal" class="modal-container fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden opacity-0"><div id="modalContent" class="modal-content bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 transform scale-95"></div></div>
-    <div id="audioError" class="fixed bottom-5 right-5 bg-red-600 text-white px-6 py-3 rounded-lg shadow-xl hidden transition-opacity duration-300" role="alert"><p id="audioErrorFile"></p></div>
 
+        <!-- Sección de Juegos (Oculta por defecto) -->
+        <div id="juegosContainer" class="hidden mt-8 space-y-6 w-full">
+            
+            <!-- Menú Principal de Juegos -->
+            <div id="menuJuegos" class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <!-- Juego 1 -->
+                <div class="bg-white shadow-lg rounded-xl p-6 border border-slate-200 text-center cursor-pointer hover:shadow-xl transition-shadow" id="cardJuego1">
+                    <div class="text-5xl mb-3">🎧🎵</div>
+                    <h3 class="font-bold text-xl text-teal-700 mb-3">Escucha y Elige</h3>
+                    <p class="text-sm text-slate-500 mb-4">Escucha la palabra y selecciona la imagen correcta.</p>
+                    <button class="px-4 py-2 bg-teal-600 text-white rounded-full shadow hover:bg-teal-700 pointer-events-none">
+                        Jugar
+                    </button>
+                </div>
+
+                <!-- Juego 2 -->
+                <div class="bg-white shadow-lg rounded-xl p-6 border border-slate-200 text-center cursor-pointer hover:shadow-xl transition-shadow" id="cardJuego2">
+                    <div class="text-5xl mb-3">🧠🎵</div>
+                    <h3 class="font-bold text-xl text-teal-700 mb-3">Memoria Auditiva</h3>
+                    <p class="text-sm text-slate-500 mb-4">Encuentra los pares de audio y texto.</p>
+                    <button class="px-4 py-2 bg-teal-600 text-white rounded-full shadow hover:bg-teal-700 pointer-events-none">
+                        Jugar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Pantalla del Juego 1 -->
+            <div id="juego1Pantalla" class="hidden bg-white p-6 rounded-xl shadow-lg border border-slate-200">
+                <div class="text-center mb-4">
+                    <h2 class="text-2xl font-bold text-teal-800">¿Qué palabra es?</h2>
+                </div>
+
+                <!-- Botones de audio -->
+                <div class="flex justify-center gap-4 mb-6">
+                    <button id="audioPurheJuego1" class="px-6 py-3 bg-teal-100 text-teal-800 rounded-full shadow hover:bg-teal-200 flex items-center gap-2">
+                        <span>🔊</span> Escuchar P'urhépecha
+                    </button>
+                </div>
+
+                <!-- Opciones -->
+                <div id="opcionesJuego1" class="grid grid-cols-2 gap-4 mb-6"></div>
+
+                <p id="resultadoJuego1" class="text-center font-bold text-lg h-8"></p>
+
+                <div class="text-center mt-4">
+                    <button id="volverJuegos1" class="px-4 py-2 bg-slate-200 text-slate-700 rounded-full hover:bg-slate-300">
+                        Volver al menú
+                    </button>
+                </div>
+            </div>
+
+            <!-- Pantalla del Juego 2 (Memorama) -->
+            <div id="juego2Pantalla" class="hidden bg-white p-6 rounded-xl shadow-lg border border-slate-200">
+                
+                <!-- Selección de dificultad -->
+                <div id="juego2Dificultad" class="text-center space-y-4">
+                    <h2 class="text-xl font-bold text-teal-700 mb-4">Elige dificultad</h2>
+                    <button data-pares="3" class="dificultadBtn px-6 py-3 bg-teal-600 text-white rounded-full shadow hover:bg-teal-700 block mx-auto w-48">Fácil (3 pares)</button>
+                    <button data-pares="4" class="dificultadBtn px-6 py-3 bg-teal-600 text-white rounded-full shadow hover:bg-teal-700 block mx-auto w-48">Medio (4 pares)</button>
+                    <button data-pares="6" class="dificultadBtn px-6 py-3 bg-teal-600 text-white rounded-full shadow hover:bg-teal-700 block mx-auto w-48">Difícil (6 pares)</button>
+                    <div class="mt-4 pt-4">
+                         <button id="volverDesdeDificultad" class="px-4 py-2 bg-slate-200 text-slate-700 rounded-full hover:bg-slate-300">Volver</button>
+                    </div>
+                </div>
+
+                <!-- Tablero del memorama -->
+                <div id="memoramaContainer" class="hidden">
+                    <div id="memoramaTablero" class="grid gap-4 mt-6"></div>
+                    <div class="text-center mt-6">
+                        <button id="volverJuegos2" class="px-4 py-2 bg-slate-200 text-slate-700 rounded-full hover:bg-slate-300">
+                            Volver al menú
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pie de página -->
+        <footer class="text-center mt-8 py-4">
+            <p class="text-sm text-slate-500">Voces auténticas grabadas por hablantes nativos.</p>
+        </footer>
+    </div>
+
+    <!-- Modal para Detalles -->
+    <div id="detailsModal" class="modal-container fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden opacity-0">
+        <div id="modalContent" class="modal-content bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 transform scale-95"></div>
+    </div>
+
+    <!-- Notificación de Error de Audio -->
+    <div id="audioError" class="fixed bottom-5 right-5 bg-red-600 text-white px-6 py-3 rounded-lg shadow-xl hidden transition-opacity duration-300" role="alert">
+        <div class="flex items-center gap-3">
+            <span>⚠️</span>
+            <div><p class="font-bold">Error</p><p id="audioErrorFile" class="text-sm">No se encontró el archivo.</p></div>
+        </div>
+    </div>
 
     <script>
         // ===================================================================================
-        // PASO 1: CONFIGURACIÓN
-        // Reemplazar estas cadenas vacías con  credenciales de Google Cloud.
+        // CONFIGURACIÓN DE VERTEX AI (IMPORTANTE)
         // ===================================================================================
-        const API_KEY = 'PEGAR_API_KEY_DE_GOOGLE_CLOUD';
-        const MODEL_ID = 'PEGAR_ID_DEL_MODELO_ENTRENADO';
+        // 1. PROJECT_ID: El ID de tu proyecto en Google Cloud (ej. 'app-purepecha-12345')
+        const PROJECT_ID = 'PEGA_TU_PROJECT_ID_AQUI';
+        
+        // 2. LOCATION: La región donde desplegaste el endpoint (ej. 'us-central1')
+        const LOCATION = 'us-central1';
+        
+        // 3. ENDPOINT_ID: El número largo que te dio Vertex AI al desplegar (ej. '1234567890...')
+        const ENDPOINT_ID = 'PEGA_TU_ENDPOINT_ID_AQUI';
+        
+        // 4. ACCESS_TOKEN: Para pruebas rápidas, necesitarás un token temporal.
+        // En una app real, esto se maneja con un backend seguro, pero para probar aquí:
+        // Ejecuta en tu terminal: gcloud auth print-access-token
+        // Y pega el resultado aquí (es una cadena muy larga de letras y números).
+        const ACCESS_TOKEN = 'PEGA_TU_TOKEN_TEMPORAL_AQUI'; 
         // ===================================================================================
 
-        const dictionary = [ 
+        const dictionary = [
             // Saludos
-            { purhepecha: 'Nájki, ¿nómbe úsï?', espanol: 'Hola, ¿cómo estás?', categoria: 'Saludos', audioSrc: 'audio/najki_nombe_usi.opus', uso: "Es el saludo más común e informal.", ejemplos: [{ purhepecha: "Nájki, ¿nómbe úsï tata?", espanol: "Hola, ¿cómo está señor?" }] },
+            { purhepecha: 'Nári jalashki?', espanol: '¿Cómo estás?', categoria: 'Saludos', audioSrc: 'audio/nári_jalashki.opus', uso: "Es un saludo común e informal." },
             { purhepecha: 'Jorhenguarhikua', espanol: 'Gracias (formal)', categoria: 'Saludos', audioSrc: 'audio/jorhenguarhikua.opus' },
-            { purhepecha: 'Diósï meiámukia', espanol: 'Gracias', categoria: 'Saludos', audioSrc: 'audio/diosi_meiamukia.opus' },
+            { purhepecha: 'Diósï meiámukia', espanol: 'Gracias', categoria: 'Saludos', audioSrc: 'audio/Diósï_meiámukia.opus' },
             { purhepecha: 'Nári eransku', espanol: 'Buenos días', categoria: 'Saludos', audioSrc: 'audio/nari_eransku.opus' },
             { purhepecha: 'Nári chusku', espanol: 'Buenas tardes', categoria: 'Saludos', audioSrc: 'audio/nari_chusku.opus' },
             { purhepecha: 'Nári churesku', espanol: 'Buenas noches', categoria: 'Saludos', audioSrc: 'audio/nari_churesku.opus' },
             { purhepecha: 'Tatsekuarhia', espanol: 'Adiós', categoria: 'Saludos', audioSrc: 'audio/tatsekuarhia.opus' },
             { purhepecha: 'Nipa', espanol: 'Adiós (informal)', categoria: 'Saludos', audioSrc: 'audio/nipa.opus' },
-            
             // Frases
-            { purhepecha: '¿Nómbe jirejtki?', espanol: '¿Cómo te llamas?', categoria: 'Frases', audioSrc: 'audio/nombe_jirejtki.opus' },
-            { purhepecha: 'Juchiti anapu jirej...', espanol: 'Mi nombre es...', categoria: 'Frases', audioSrc: 'audio/juchiti_anapu_jirej.opus' },
-            { purhepecha: '¿Nómbe anapueski?', espanol: '¿De dónde eres?', categoria: 'Frases', audioSrc: 'audio/nombe_anapueski.opus' },
-            { purhepecha: '¿Nómbe xáni?', espanol: '¿Cuánto cuesta?', categoria: 'Frases', audioSrc: 'audio/nombe_xani.opus' },
-            { purhepecha: 'Ásï jantontskani', espanol: 'Vamos a comer', categoria: 'Frases', audioSrc: 'audio/asi_jantontskani.opus' },
-            
+            { purhepecha: 'Nári alignshing', espanol: '¿Cómo te llamas?', categoria: 'Frases', audioSrc: 'audio/nari_alignshing.opus' },
+            { purhepecha: 'Ji alingshin...', espanol: 'Mi nombre es...', categoria: 'Frases', audioSrc: 'audio/ji_alingshing.opus' },
+            { purhepecha: 'Nariri anapushki', espanol: '¿De dónde eres?', categoria: 'Frases', audioSrc: 'audio/nari_anapushki.opus' },
+            { purhepecha: 'Y nashani jukapalashki?', espanol: '¿Cuánto cuesta?', categoria: 'Frases', audioSrc: 'audio/y_nashani_jukapalashki.opus' },
+            { purhepecha: 'Juya t’irien', espanol: 'Vamos a comer', categoria: 'Frases', audioSrc: 'audio/juya_t’irien.opus' },
             // Números
             { purhepecha: 'Ma', espanol: 'Uno', categoria: 'Números', audioSrc: 'audio/ma.opus' },
             { purhepecha: 'Tsimani', espanol: 'Dos', categoria: 'Números', audioSrc: 'audio/tsimani.opus' },
             { purhepecha: 'Tanimo', espanol: 'Tres', categoria: 'Números', audioSrc: 'audio/tanimo.opus' },
-            { purhepecha: "T'ámu", espanol: 'Cuatro', categoria: 'Números', audioSrc: 'audio/tamu.opus' },
-            { purhepecha: 'Iúmu', espanol: 'Cinco', categoria: 'Números', audioSrc: 'audio/iumu.opus' },
-            
+            { purhepecha: "T'ámu", espanol: 'Cuatro', categoria: 'Números', audioSrc: 'audio/t’amu.opus' },
+            { purhepecha: 'Iúmu', espanol: 'Cinco', categoria: 'Números', audioSrc: 'audio/iúmu.opus' },
+            { purhepecha: 'Kuimu', espanol: 'Seis', categoria: 'Números', audioSrc: 'audio/kuimu.opus' },
             // Familia
-            { purhepecha: 'Nana', espanol: 'Mamá', categoria: 'Familia', audioSrc: 'audio/nana.opus', imageSrc: 'images/nana.jpg' },
+            { purhepecha: 'Nana', espanol: 'Mamá', categoria: 'Familia', audioSrc: 'audio/naná.opus', imageSrc: 'images/nana.jpg' },
             { purhepecha: 'Tata', espanol: 'Papá', categoria: 'Familia', audioSrc: 'audio/tata.opus', imageSrc: 'images/tata.jpg' },
-            
             // Comida
-            { purhepecha: 'K´ulunda', espanol: 'Corunda (platillo)', categoria: 'Comida', audioSrc: 'audio/corunda.opus', imageSrc: 'images/corunda.jpg', uso: "Es un tamal de masa de maíz, de forma triangular.", cultural: "Las corundas son un platillo ceremonial y festivo en Michoacán.", ejemplos: [{ purhepecha: "Juchari nana sesi k´ulunda arhisïndi.", espanol: "Mi mamá hace unas corundas muy ricas." }] },
-            
+            { purhepecha: 'Kurucha', espanol: 'Pescado', categoria: 'Comida', audioSrc: 'audio/kurucha.opus', imageSrc: 'images/kurucha.jpg', uso: "Se refiere al pescado en general.", cultural: "El pescado es fundamental en la gastronomía de la zona del Lago de Pátzcuaro." },
+            { purhepecha: "K'ulunda", espanol: 'Corunda (platillo)', categoria: 'Comida', audioSrc: 'audio/k’ulunda.opus', imageSrc: 'images/corunda.jpg', uso: "Es un tamal de masa de maíz, de forma triangular.", cultural: "Las corundas son un platillo ceremonial y festivo en Michoacán.", ejemplos: [{ purhepecha: "Juchari nana sesi k'ulundas arhisïndi.", espanol: "Mi mamá hace unas corundas muy ricas." }] },
             // Animales
-            { purhepecha: 'Tzintzuni', espanol: 'Colibrí', categoria: 'Animales', audioSrc: 'audio/uitsiki.opus', imageSrc: 'images/colibri.jpg', pronunciacion: "La 'ts' suena similar a la 'z' en algunas regiones de España.", cultural: "En la mitología P'urhépecha, el colibrí era un mensajero de los dioses." },
-            
+            { purhepecha: 'Tzintzuni', espanol: 'Colibrí', categoria: 'Animales', audioSrc: 'audio/tzintzuni.opus', imageSrc: 'images/colibri.jpg', cultural: "En la mitología P'urhépecha, el colibrí era un mensajero de los dioses. Da nombre a la antigua capital del imperio: Tzintzuntzan." },
             // Emergencia
             { purhepecha: 'Chélikua', espanol: 'Peligro', categoria: 'Emergencia', audioSrc: 'audio/chelikua.opus', imageSrc: 'images/peligro.jpg', uso: "Se usa para alertar sobre una situación de riesgo inminente.", ejemplos: [{ purhepecha: "Chélikua! K'eri jurhiani!", espanol: "¡Peligro! ¡Hay un incendio!" }] },
             { purhepecha: 'Jarhuatarini', espanol: 'Auxilio (pedir ayuda)', categoria: 'Emergencia', audioSrc: 'audio/jarhuatarini.opus', imageSrc: 'images/ayuda.jpg', uso: "Se utiliza para solicitar ayuda urgente en situaciones de emergencia.", ejemplos: [{ purhepecha: "Jarhuatarini! Nari xurhini!", espanol: "¡Auxilio! ¡Me están atacando!" }] },
             { purhepecha: 'Jarhuajpikua', espanol: 'Ayuda', categoria: 'Emergencia', audioSrc: 'audio/jarhuajpikua.opus' },
-
             // Básicos
             { purhepecha: 'Bañolu', espanol: 'Baño', categoria: 'Básicos', audioSrc: 'audio/bañolu.opus', imageSrc: 'images/baño.jpg', uso: "Se refiere al lugar donde se realizan las necesidades fisiológicas.", ejemplos: [{ purhepecha: "Nari banolu anapu.", espanol: "Voy al baño." }] },
-            { purhepecha: 'Itsï', espanol: 'Agua', categoria: 'Básicos', audioSrc: 'audio/itsï.opus', imageSrc: 'images/agua.jpg', uso: "Es esencial para la vida y la hidratación.", ejemplos: [{ purhepecha: "Nari itsï anapu.", espanol: "Quiero agua." }] },
-            { purhepecha: 'Akua', espanol: 'Comida', categoria: 'Básicos', audioSrc: 'audio/akua.opus', imageSrc: 'images/comida.jpg', uso: "Se refiere a los alimentos en general.", ejemplos: [{ purhepecha: "Nari akua anapu.", espanol: "Tengo hambre." }] },
-            { purhepecha: 'T\'irekua', espanol: 'Comida (el acto de comer)', categoria: 'Básicos', audioSrc: 'audio/t\'irekua.opus', imageSrc: 'images/comida_comer.jpg', uso: "Se refiere al acto de ingerir alimentos.", ejemplos: [{ purhepecha: "Ásï t'irekua.", espanol: "Vamos a comer." }] },
-
-
+            { purhepecha: 'Itsï', espanol: 'Agua', categoria: 'Básicos', audioSrc: 'audio/itsï.opus', imageSrc: 'images/itsi.jpg' },
+            { purhepecha: 'Akua', espanol: 'Comida', categoria: 'Básicos', audioSrc: 'audio/akua.opus', imageSrc: 'images/akua.jpg' },
+            { purhepecha: 'T\'irekua', espanol: 'Comida (el acto de comer)', categoria: 'Básicos', audioSrc: 'audio/t’irekua.opus', imageSrc: 'images/t’irekua.jpg', uso: "Se refiere al acto de ingerir alimentos.", ejemplos: [{ purhepecha: "Ásï t'irekua.", espanol: "Vamos a comer." }] },
             // Respuestas
             { purhepecha: 'Jo', espanol: 'Sí', categoria: 'Respuestas', audioSrc: 'audio/jo.opus' },
             { purhepecha: 'Nómbe', espanol: 'No', categoria: 'Respuestas', audioSrc: 'audio/nombe.opus' },
             { purhepecha: 'Sési', espanol: 'Bien', categoria: 'Respuestas', audioSrc: 'audio/sesi.opus' },
-
             // Acciones
-            { purhepecha: 'Nóteru', espanol: 'Cancelar (ya no)', categoria: 'Acciones', audioSrc: 'audio/noteru.opus' },
-            { purhepecha: 'Kétsini', espanol: 'Bajar', categoria: 'Acciones', audioSrc: 'audio/ketsini.opus' },
+            { purhepecha: 'Nóteru', espanol: 'Cancelar (ya no)', categoria: 'Acciones', audioSrc: 'audio/nóteru.opus' },
+            { purhepecha: 'Kétsini', espanol: 'Bajar', categoria: 'Acciones', audioSrc: 'audio/kétsini.opus' },
             { purhepecha: 'Karharani', espanol: 'Subir', categoria: 'Acciones', audioSrc: 'audio/karharani.opus' },
             { purhepecha: 'Xanharani', espanol: 'Avanzar (caminar)', categoria: 'Acciones', audioSrc: 'audio/xanharani.opus' },
-            { purhepecha: 'Uénan', espanol: 'Iniciar', categoria: 'Acciones', audioSrc: 'audio/uenan.opus' },
-            { purhepecha: 'Chúxapani', espanol: 'Siga (seguir)', categoria: 'Acciones', audioSrc: 'audio/chuxapani.opus' },
+            { purhepecha: 'Uénan', espanol: 'Iniciar', categoria: 'Acciones', audioSrc: 'audio/uénan.opus' },
+            { purhepecha: 'Chúxapani', espanol: 'Siga (seguir)', categoria: 'Acciones', audioSrc: 'audio/chúxapani.opus' },
             { purhepecha: 'Anhaxutani', espanol: 'Detener', categoria: 'Acciones', audioSrc: 'audio/anhaxutani.opus' },
             { purhepecha: 'Anhaxurhini', espanol: 'Parar', categoria: 'Acciones', audioSrc: 'audio/anhaxurhini.opus' },
-
             // Direcciones
-            { purhepecha: 'Jurhíjkandani', espanol: 'Derecha', categoria: 'Direcciones', audioSrc: 'audio/jurhijkandani.opus' },
+            { purhepecha: 'Jurhíjkandani', espanol: 'Derecha', categoria: 'Direcciones', audioSrc: 'audio/jurhíjkandani.opus' },
             { purhepecha: 'Uikixkandani', espanol: 'Izquierda', categoria: 'Direcciones', audioSrc: 'audio/uikixkandani.opus' },
             { purhepecha: 'Uikix', espanol: 'Izquierda (corto)', categoria: 'Direcciones', audioSrc: 'audio/uikix.opus' },
-            { purhepecha: 'Tátsipani', espanol: 'Atrás', categoria: 'Direcciones', audioSrc: 'audio/tatsipani.opus' },
+            { purhepecha: 'Tátsipani', espanol: 'Atrás', categoria: 'Direcciones', audioSrc: 'audio/tátsipani.opus' },
             { purhepecha: 'Orhepani', espanol: 'Adelante', categoria: 'Direcciones', audioSrc: 'audio/orhepani.opus' },
-
             // Adjetivos
-            { purhepecha: 'Iótani', espanol: 'Alto (altura)', categoria: 'Adjetivos', audioSrc: 'audio/iotani.opus' },
-            { purhepecha: "K'éri", espanol: 'Grande', categoria: 'Adjetivos', audioSrc: 'audio/keri.opus' },
-            { purhepecha: 'Sési jásï', espanol: 'Está muy bonito / a', categoria: 'Adjetivos', audioSrc: 'audio/sesi_jasi.opus' },
-            
+            { purhepecha: 'Iótani', espanol: 'Alto (altura)', categoria: 'Adjetivos', audioSrc: 'audio/iótani.opus' },
+            { purhepecha: "K'éri", espanol: 'Grande', categoria: 'Adjetivos', audioSrc: 'audio/k’éri.opus' },
+            { purhepecha: 'Sési jásï', espanol: 'Está muy bonito / a', categoria: 'Adjetivos', audioSrc: 'audio/Sési_jásï.opus' },
             // Sentimientos
-            { purhepecha: 'Uékperakua', espanol: 'Amor', categoria: 'Sentimientos', audioSrc: 'audio/uekperakua.opus' },
-            { purhepecha: 'Uékasïnga', espanol: 'Te quiero / Te amo', categoria: 'Sentimientos', audioSrc: 'audio/uekasinga.opus' },
+            { purhepecha: 'Uékasïnga', espanol: 'Te quiero / Te amo', categoria: 'Sentimientos', audioSrc: 'audio/Uékasïnga.opus' },
         ];
 
-
-        // --- Selectores de Elementos ---
+        // ELEMENTOS DOM
         const searchInput = document.getElementById('searchInput');
         const categoryFilters = document.getElementById('categoryFilters');
         const resultsContainer = document.getElementById('resultsContainer');
         const initialPrompt = document.getElementById('initialPrompt');
         const micButton = document.getElementById('micButton');
         const micStatus = document.getElementById('micStatus');
-        
+        const detailsModal = document.getElementById('detailsModal');
+        const modalContent = document.getElementById('modalContent');
+        const audioError = document.getElementById('audioError');
+        const audioErrorFile = document.getElementById('audioErrorFile');
+        const juegosBtn = document.getElementById("juegosBtn");
+        const juegosContainer = document.getElementById("juegosContainer");
+        const mainContent = document.getElementById("mainContent"); // Nuevo contenedor para buscar/resultados
+        const searchSection = document.getElementById("searchSection"); // Barra de busqueda
+
+        let currentAudio = null;
+        let currentlyPlayingButton = null;
+
+        // --- LÓGICA DE CONEXIÓN A VERTEX AI (NUEVA) ---
+        async function enviarAudioAVertexAI(audioBlob) {
+            const url = `https://${LOCATION}-aiplatform.googleapis.com/v1/projects/${PROJECT_ID}/locations/${LOCATION}/endpoints/${ENDPOINT_ID}:predict`;
+
+            const reader = new FileReader();
+            reader.readAsDataURL(audioBlob);
+            reader.onloadend = async () => {
+                const base64Audio = reader.result.split(',')[1]; 
+                
+                const payload = {
+                    "instances": [
+                        { "audio_content": base64Audio }
+                    ]
+                };
+
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${ACCESS_TOKEN}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) throw new Error(await response.text());
+
+                    const data = await response.json();
+                    console.log("Respuesta Vertex:", data);
+                    
+                    // AQUI DEBERÍAS MAPEAR LA RESPUESTA REAL DEL MODELO
+                    // Como es un modelo custom, la salida variará, pero asumimos que la predicción viene en 'predictions'
+                    // Para este ejemplo, mostramos un mensaje de éxito.
+                    micStatus.textContent = "¡Audio procesado! (Ver consola para detalles)";
+                    
+                } catch (error) {
+                    console.error("Error en Vertex AI:", error);
+                    micStatus.textContent = "Error al conectar con el modelo.";
+                }
+            };
+        }
+
+        // --- Lógica de Grabación del Micrófono ---
+        let isRecording = false;
         let mediaRecorder;
         let audioChunks = [];
-        let isRecording = false;
 
-        // --- Lógica de Grabación de Audio ---
         micButton.addEventListener('click', async () => {
             if (isRecording) {
                 mediaRecorder.stop();
                 isRecording = false;
                 micButton.classList.remove('listening');
                 micStatus.textContent = 'Procesando...';
-                return;
-            }
-
-            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                micStatus.textContent = 'Tu navegador no soporta la grabación de audio.';
-                return;
-            }
-            if (API_KEY === 'PEGAR_API_KEY_DE_GOOGLE_CLOUD' || MODEL_ID === 'PEGAR_EL_ID_DEL_MODELO_ENTRENADO') {
-                micStatus.textContent = 'Error: API Key o Model ID no configurados.';
-                return;
-            }
-
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                isRecording = true;
-                micButton.classList.add('listening');
-                micStatus.textContent = 'Grabando... (presiona de nuevo para detener)';
-                
-                mediaRecorder = new MediaRecorder(stream);
-                mediaRecorder.start();
-
-                mediaRecorder.ondataavailable = event => {
-                    audioChunks.push(event.data);
-                };
-
-                mediaRecorder.onstop = () => {
-                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                    reconocerVozConModeloPersonalizado(audioBlob);
+            } else {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    // Configurar para grabar en un formato que el modelo entienda mejor si es posible
+                    // 'audio/webm;codecs=opus' es estándar en Chrome
+                    mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus' });
                     audioChunks = [];
-                    stream.getTracks().forEach(track => track.stop()); // Detener el acceso al micrófono
-                };
-            } catch (err) {
-                console.error('Error al acceder al micrófono:', err);
-                micStatus.textContent = 'Error: No se pudo acceder al micrófono.';
-                isRecording = false;
-                micButton.classList.remove('listening');
+                    mediaRecorder.start();
+                    isRecording = true;
+                    micButton.classList.add('listening');
+                    micStatus.textContent = 'Grabando...';
+
+                    mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+                    mediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                        enviarAudioAVertexAI(audioBlob);
+                    };
+                } catch (e) {
+                    console.error(e);
+                    micStatus.textContent = 'Error de micrófono.';
+                }
             }
         });
 
-        // --- Lógica de API de Google Cloud ---
-        async function reconocerVozConModeloPersonalizado(audioBlob) {
-            const url = `https://speech.googleapis.com/v1p1beta1/speech:recognize?key=${API_KEY}`;
 
-            // Convertir el audio a Base64
-            const reader = new FileReader();
-            reader.readAsDataURL(audioBlob);
-            reader.onloadend = async () => {
-                const base64Audio = reader.result.split(',')[1];
-
-                const requestBody = {
-                    config: {
-                        encoding: 'WEBM_OPUS', 
-                        sampleRateHertz: 48000, 
-                        languageCode: 'es-MX',
-                        model: MODEL_ID, // Se usa el modelo personalizado
-                    },
-                    audio: { content: base64Audio },
-                };
-
-                try {
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        body: JSON.stringify(requestBody),
-                    });
-
-                    if (!response.ok) {
-                        throw new Error(`Error de la API: ${response.statusText}`);
-                    }
-
-                    const data = await response.json();
-                    
-                    if (data.results && data.results.length > 0) {
-                        const transcripcion = data.results[0].alternatives[0].transcript;
-                        micStatus.textContent = `Reconocido: "${transcripcion}"`;
-                        searchInput.value = transcripcion;
-                        
-                        // Activa el filtro para mostrar el resultado
-                        const mostrarTodoBtn = document.querySelector('.category-btn[data-category="Mostrar todo"]');
-                        if (mostrarTodoBtn) mostrarTodoBtn.click();
-                        else filterAndRender();
-
-                    } else {
-                        micStatus.textContent = 'No se pudo reconocer la palabra. Inténtalo de nuevo.';
-                    }
-                } catch (error) {
-                    console.error('Error al contactar la API de Speech-to-Text:', error);
-                    micStatus.textContent = 'Error al procesar el audio.';
-                } finally {
-                    setTimeout(() => micStatus.textContent = '', 4000);
-                }
-            };
-        }
-
-        const detailsModal = document.getElementById('detailsModal');
-        const modalContent = document.getElementById('modalContent');
-        const audioError = document.getElementById('audioError');
-        const audioErrorFile = document.getElementById('audioErrorFile');
-        let currentAudio = null;
-        let currentlyPlayingButton = null;
-
+        // FUNCIONES CORE DE LA APP (UI, Audio, Juegos)
         function playAudio(src, buttonElement) {
             if (!src) return;
             if (currentAudio) {
@@ -293,63 +378,68 @@
                 if (currentlyPlayingButton) currentlyPlayingButton.classList.remove('playing');
             }
             if (currentlyPlayingButton === buttonElement) {
-                currentAudio = null;
-                currentlyPlayingButton = null;
-                return;
+                currentAudio = null; currentlyPlayingButton = null; return;
             }
             currentAudio = new Audio(src);
             currentlyPlayingButton = buttonElement;
             buttonElement.classList.add('playing');
             currentAudio.play().catch(error => {
+                console.log("Error play", error);
                 audioErrorFile.textContent = `No se encontró: "${src.split('/').pop()}"`;
                 audioError.classList.remove('hidden');
                 setTimeout(() => { audioError.classList.add('hidden'); }, 4000);
                 buttonElement.classList.remove('playing');
-                currentAudio = null;
-                currentlyPlayingButton = null;
+                currentAudio = null; currentlyPlayingButton = null;
             });
             currentAudio.onended = () => {
                 buttonElement.classList.remove('playing');
-                currentAudio = null;
-                currentlyPlayingButton = null;
+                currentAudio = null; currentlyPlayingButton = null;
             }
         }
+
         function openModal(index) {
             const item = dictionary[parseInt(index)];
             if (!item) return;
-            let contentHtml = `<div class="flex justify-between items-start"><di> <h2 class="text-3xl font-bold text-teal-800">${item.purhepecha}</h2> <p class="text-xl text-slate-600 mt-1">${item.espanol}</p></div> <button id="closeModalBtn" class="p-2 rounded-full hover:bg-slate-200"><svg class="w-6 h-6 text-slate-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button></div>`;
-            if (item.imageSrc) { contentHtml += `<img src="${item.imageSrc}" alt="${item.espanol}" class="w-full h-48 object-cover rounded-xl mt-4 mb-6" onerror="this.style.display='none'">`; } else { contentHtml += '<hr class="my-6">'; }
-            if (item.pronunciacion) { contentHtml += `<div class="mb-4"><h3 class="font-bold text-lg text-slate-800">Pronunciación</h3><p class="text-slate-600">${item.pronunciacion}</p></div>`; }
-            if (item.uso) { contentHtml += `<div class="mb-4"><h3 class="font-bold text-lg text-slate-800">Notas de Uso</h3><p class="text-slate-600">${item.uso}</p></div>`; }
-            if (item.ejemplos && item.ejemplos.length > 0) { contentHtml += `<div class="mb-4"><h3 class="font-bold text-lg text-slate-800">Ejemplos</h3><ul class="list-disc list-inside space-y-2 mt-2 pl-2">${item.ejemplos.map(e => `<li><span class="text-slate-700 font-medium">${e.purhepecha}</span><br><span class="text-slate-500 text-sm pl-4">${e.espanol}</span></li>`).join('')}</ul></div>`; }
-            if (item.cultural) { contentHtml += `<div class="mb-4 bg-teal-50 border-l-4 border-teal-500 p-4 rounded-r-lg"><h3 class="font-bold text-lg text-teal-900">Contexto Cultural</h3><p class="text-teal-800">${item.cultural}</p></div>`; }
-            modalContent.innerHTML = contentHtml;
+            let html = `<div class="flex justify-between items-start"><div class="pr-4"><h2 class="text-3xl font-bold text-teal-800">${item.purhepecha}</h2> <p class="text-xl text-slate-600 mt-1">${item.espanol}</p></div> <button id="closeModalBtn" class="p-2 -mr-2 rounded-full hover:bg-slate-200 flex-shrink-0"><svg class="w-6 h-6 text-slate-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button></div>`;
+            
+            if (item.imageSrc) html += `<img src="${item.imageSrc}" alt="${item.espanol}" class="w-full h-48 object-cover rounded-xl mt-4 mb-6" onerror="this.style.display='none'">`;
+            else html += '<hr class="my-6">';
+            
+            if (item.pronunciacion) html += `<div class="mb-4"><h3 class="font-bold text-lg text-slate-800">Pronunciación</h3><p class="text-slate-600">${item.pronunciacion}</p></div>`;
+            if (item.uso) html += `<div class="mb-4"><h3 class="font-bold text-lg text-slate-800">Notas de Uso</h3><p class="text-slate-600">${item.uso}</p></div>`;
+            if (item.ejemplos) html += `<div class="mb-4"><h3 class="font-bold text-lg text-slate-800">Ejemplos</h3><ul class="list-disc list-inside space-y-2 mt-2 pl-2">${item.ejemplos.map(e => `<li><span class="text-slate-700 font-medium">${e.purhepecha}</span><br><span class="text-slate-500 text-sm pl-4">${e.espanol}</span></li>`).join('')}</ul></div>`;
+            if (item.cultural) html += `<div class="mb-4 bg-teal-50 border-l-4 border-teal-500 p-4 rounded-r-lg"><h3 class="font-bold text-lg text-teal-900">Contexto Cultural</h3><p class="text-teal-800">${item.cultural}</p></div>`;
+            
+            modalContent.innerHTML = html;
             detailsModal.classList.remove('hidden');
             setTimeout(() => { detailsModal.classList.remove('opacity-0'); modalContent.classList.remove('scale-95'); }, 10);
+            
             document.getElementById('closeModalBtn').addEventListener('click', closeModal);
         }
+
         function closeModal() {
             detailsModal.classList.add('opacity-0');
             modalContent.classList.add('scale-95');
             setTimeout(() => { detailsModal.classList.add('hidden'); }, 300);
         }
+
         function renderWords(wordArray) {
             resultsContainer.innerHTML = '';
             if (wordArray.length === 0) { resultsContainer.innerHTML = `<div class="text-center py-10 px-4"><h3 class="mt-2 text-lg font-medium text-slate-900">Sin resultados</h3><p class="mt-1 text-sm text-slate-500">No se encontraron resultados.</p></div>`; return; }
             wordArray.forEach((word) => {
                 const card = document.createElement('div');
                 card.className = 'bg-white rounded-xl shadow-md border border-slate-200 flex items-center justify-between transition-shadow hover:shadow-lg';
-                const imageHtml = word.imageSrc ? `<img src="${word.imageSrc}" alt="${word.espanol}" class="w-16 h-16 object-cover rounded-l-lg mr-4 flex-shrink-0" onerror="this.style.display='none';">` : '<div class="w-4"></div>';
+                const imageHtml = word.imageSrc ? `<img src="${word.imageSrc}" alt="${word.espanol}" class="w-16 h-16 object-cover rounded-l-xl mr-4 flex-shrink-0" onerror="this.style.display='none';">` : '<div class="w-4"></div>';
                 card.innerHTML = `<div class="flex items-center flex-grow min-w-0 cursor-pointer" data-index="${word.originalIndex}"><div class="flex items-center flex-grow min-w-0">${imageHtml}<div class="min-w-0 py-4"><p class="font-semibold text-lg text-teal-800 truncate">${word.purhepecha}</p><p class="text-slate-600 truncate">${word.espanol}</p></div></div></div><div class="px-4"><button class="play-btn flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-teal-50 hover:bg-teal-100 active:bg-teal-200" data-audio-src="${word.audioSrc}"><svg class="play-icon w-6 h-6 text-teal-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 11.632a.75.75 0 010 1.236l-6 3.75a.75.75 0 01-1.114-.618V8.484a.75.75 0 011.114-.618l6 3.75z" /><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5a.75.75 0 00-.75.75v13.5a.75.75 0 001.5 0V5.25A.75.75 0 008.25 4.5z" /></svg><svg class="playing-icon w-6 h-6 text-teal-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 9l10.5-3m0 6.553v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 11-.99-3.467l2.31-.66a2.25 2.25 0 001.632-2.163zm0 0V2.25L9 5.25v10.303m0 0v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 01-.99-3.467l2.31-.66A2.25 2.25 0 009 15.553z" /></svg></button></div>`;
                 resultsContainer.appendChild(card);
             });
         }
         function renderCategories() {
             const categories = ['Mostrar todo', ...new Set(dictionary.map(item => item.categoria))];
-            categoryFilters.innerHTML = ''; // Limpiar filtros antes de renderizar
+            categoryFilters.innerHTML = '';
             categories.forEach(category => {
                 const button = document.createElement('button');
-                button.className = 'category-btn px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-full hover:bg-slate-100';
+                button.className = 'category-btn px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-full hover:bg-slate-100 transition-colors';
                 button.textContent = category; button.dataset.category = category;
                 categoryFilters.appendChild(button);
             });
@@ -357,12 +447,222 @@
         function filterAndRender() {
             const searchTerm = searchInput.value.toLowerCase();
             const activeCategory = document.querySelector('.category-btn.active')?.dataset.category;
-            let indexedDictionary = dictionary.map((word, index) => ({...word, originalIndex: index}));
+            let indexedDictionary = dictionary.map((word, index) => ({ ...word, originalIndex: index }));
             let filteredWords = indexedDictionary;
             if (activeCategory && activeCategory !== 'Mostrar todo') { filteredWords = filteredWords.filter(word => word.categoria === activeCategory); }
             if (searchTerm) { filteredWords = filteredWords.filter(word => word.purhepecha.toLowerCase().includes(searchTerm) || word.espanol.toLowerCase().includes(searchTerm)); }
             renderWords(filteredWords);
         }
+
+        // --- Lógica del Botón de Juegos ---
+        if(juegosBtn) {
+            juegosBtn.addEventListener("click", () => {
+                console.log("Botón Juegos Clickeado");
+                const isGamesVisible = !juegosContainer.classList.contains('hidden');
+                
+                if (isGamesVisible) {
+                    // Cerrar juegos, volver a inicio
+                    juegosContainer.classList.add("hidden");
+                    mainContent.classList.remove("hidden");
+                    categoryFilters.classList.remove("hidden");
+                    searchSection.classList.remove("hidden");
+                    juegosBtn.textContent = "🎮 Juegos";
+                    juegosBtn.classList.replace('bg-slate-600', 'bg-teal-600');
+                } else {
+                    // Abrir juegos
+                    juegosContainer.classList.remove("hidden");
+                    mainContent.classList.add("hidden");
+                    categoryFilters.classList.add("hidden");
+                    searchSection.classList.add("hidden");
+                    juegosBtn.textContent = "🏠 Volver al Diccionario";
+                    juegosBtn.classList.replace('bg-teal-600', 'bg-slate-600');
+                }
+            });
+        }
+
+        // --- JUEGO 1: Escucha y Elige ---
+        const cardJuego1 = document.getElementById("cardJuego1");
+        const juego1Pantalla = document.getElementById("juego1Pantalla");
+        const volverJuegos1 = document.getElementById("volverJuegos1");
+        const opcionesJuego1 = document.getElementById("opcionesJuego1");
+        const resultadoJuego1 = document.getElementById("resultadoJuego1");
+        const audioPurheBtn = document.getElementById("audioPurheJuego1");
+        let palabraCorrecta = null;
+
+        cardJuego1.addEventListener("click", () => {
+            document.getElementById("menuJuegos").classList.add("hidden");
+            juego1Pantalla.classList.remove("hidden");
+            iniciarJuego1();
+        });
+
+        volverJuegos1.addEventListener("click", () => {
+            juego1Pantalla.classList.add("hidden");
+            document.getElementById("menuJuegos").classList.remove("hidden");
+        });
+
+        function iniciarJuego1() {
+            resultadoJuego1.textContent = "";
+            
+            // Filtrar solo palabras que tengan audio
+            const palabrasConAudio = dictionary.filter(w => w.audioSrc);
+            if(palabrasConAudio.length < 4) {
+                alert("No hay suficientes audios para jugar.");
+                return;
+            }
+
+            const palabra = palabrasConAudio[Math.floor(Math.random() * palabrasConAudio.length)];
+            palabraCorrecta = palabra;
+
+            audioPurheBtn.onclick = () => {
+                if(palabra.audioSrc) new Audio(palabra.audioSrc).play();
+            };
+
+            let opciones = [palabra];
+            while (opciones.length < 4) {
+                let rand = palabrasConAudio[Math.floor(Math.random() * palabrasConAudio.length)];
+                if (!opciones.includes(rand)) opciones.push(rand);
+            }
+            opciones = opciones.sort(() => Math.random() - 0.5);
+
+            opcionesJuego1.innerHTML = "";
+            opciones.forEach(op => {
+                const div = document.createElement("div");
+                div.className = "cursor-pointer bg-slate-50 hover:bg-teal-50 border border-slate-200 rounded-xl p-2 transition-colors";
+                
+                // Usar imagen por defecto si no existe
+                const imgSrc = op.imageSrc || `https://placehold.co/300x200?text=${encodeURIComponent(op.espanol)}`; 
+                
+                div.innerHTML = `<img src="${imgSrc}" class="w-full h-32 object-cover rounded-lg shadow-sm pointer-events-none">`;
+                
+                div.onclick = () => {
+                    if (op === palabraCorrecta) {
+                        resultadoJuego1.textContent = "✔️ ¡Correcto! " + palabraCorrecta.espanol;
+                        resultadoJuego1.className = "text-center font-bold text-lg text-green-600 h-8";
+                        setTimeout(() => iniciarJuego1(), 1500);
+                    } else {
+                        resultadoJuego1.textContent = "❌ Incorrecto, intenta de nuevo";
+                        resultadoJuego1.className = "text-center font-bold text-lg text-red-600 h-8";
+                    }
+                };
+                opcionesJuego1.appendChild(div);
+            });
+        }
+
+        // --- JUEGO 2 (MEMORAMA) ---
+        const cardJuego2 = document.getElementById("cardJuego2");
+        const juego2Pantalla = document.getElementById("juego2Pantalla");
+        const juego2Dificultad = document.getElementById("juego2Dificultad");
+        const memoramaContainer = document.getElementById("memoramaContainer");
+        const memoramaTablero = document.getElementById("memoramaTablero");
+        const volverJuegos2 = document.getElementById("volverJuegos2");
+        const volverDesdeDificultad = document.getElementById("volverDesdeDificultad");
+
+        cardJuego2.addEventListener("click", () => {
+            document.getElementById("menuJuegos").classList.add("hidden");
+            juego2Pantalla.classList.remove("hidden");
+            juego2Dificultad.classList.remove("hidden");
+            memoramaContainer.classList.add("hidden");
+        });
+
+        volverDesdeDificultad.addEventListener("click", () => {
+            juego2Pantalla.classList.add("hidden");
+            document.getElementById("menuJuegos").classList.remove("hidden");
+        });
+
+        volverJuegos2.addEventListener("click", () => {
+            memoramaContainer.classList.add("hidden");
+            juego2Dificultad.classList.remove("hidden");
+        });
+
+        document.querySelectorAll(".dificultadBtn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                iniciarMemorama(parseInt(btn.dataset.pares));
+            });
+        });
+
+        let cartaVolteada = null;
+        let bloqueoTablero = false;
+
+        function iniciarMemorama(pares) {
+            juego2Dificultad.classList.add("hidden");
+            memoramaContainer.classList.remove("hidden");
+            memoramaTablero.innerHTML = "";
+            cartaVolteada = null;
+            bloqueoTablero = false;
+
+            // Filtrar palabras que tengan audio
+            const candidatos = dictionary.filter(w => w.audioSrc);
+            const seleccionadas = [];
+            
+            while(seleccionadas.length < pares) {
+                let rand = candidatos[Math.floor(Math.random() * candidatos.length)];
+                if (!seleccionadas.includes(rand)) seleccionadas.push(rand);
+            }
+
+            let cartas = [];
+            seleccionadas.forEach(p => {
+                cartas.push({ tipo: "texto", val: p.purhepecha, obj: p });
+                cartas.push({ tipo: "audio", val: "audio", obj: p });
+            });
+            cartas.sort(() => Math.random() - 0.5);
+
+            memoramaTablero.className = `grid gap-4 mt-6 grid-cols-${Math.min(pares, 4)}`;
+            if(pares > 4) memoramaTablero.className = "grid gap-4 mt-6 grid-cols-3 sm:grid-cols-4";
+
+            cartas.forEach(c => {
+                const div = document.createElement("div");
+                div.className = "bg-white border-2 border-teal-600 p-2 rounded-xl shadow cursor-pointer h-24 flex items-center justify-center text-center transition-transform hover:scale-105";
+                div.innerHTML = `<span class="text-3xl text-teal-600 font-bold">?</span>`;
+                
+                div.onclick = () => manejarCarta(div, c);
+                memoramaTablero.appendChild(div);
+            });
+        }
+
+        function manejarCarta(div, carta) {
+            if (bloqueoTablero || div === cartaVolteada || div.classList.contains("volteada")) return;
+
+            div.classList.add("volteada");
+            
+            if (carta.tipo === "texto") {
+                div.innerHTML = `<span class="font-bold text-slate-700 text-sm sm:text-base">${carta.obj.purhepecha}</span>`;
+            } else {
+                div.innerHTML = `<span>🔊</span>`;
+                new Audio(carta.obj.audioSrc).play();
+            }
+
+            if (!cartaVolteada) {
+                cartaVolteada = div;
+                cartaVolteada.datoCarta = carta;
+                return;
+            }
+
+            // Segunda carta volteada
+            const carta1 = cartaVolteada.datoCarta;
+            const carta2 = carta;
+
+            if (carta1.obj === carta2.obj) {
+                // Match!
+                cartaVolteada.classList.replace("border-teal-600", "border-green-500");
+                div.classList.replace("border-teal-600", "border-green-500");
+                cartaVolteada = null;
+            } else {
+                // No match
+                bloqueoTablero = true;
+                setTimeout(() => {
+                    div.classList.remove("volteada");
+                    div.innerHTML = `<span class="text-3xl text-teal-600 font-bold">?</span>`;
+                    
+                    cartaVolteada.classList.remove("volteada");
+                    cartaVolteada.innerHTML = `<span class="text-3xl text-teal-600 font-bold">?</span>`;
+                    
+                    cartaVolteada = null;
+                    bloqueoTablero = false;
+                }, 1000);
+            }
+        }
+
+        // EVENT LISTENER GENERALES
         searchInput.addEventListener('input', filterAndRender);
         categoryFilters.addEventListener('click', (e) => {
             if (e.target.classList.contains('category-btn')) {
@@ -378,7 +678,12 @@
                     initialPrompt.classList.add('hidden');
                     filterAndRender();
                     resultsContainer.classList.remove('hidden');
-                    requestAnimationFrame(() => { resultsContainer.classList.remove('opacity-0', 'scale-95'); resultsContainer.classList.add('opacity-100', 'scale-100'); });
+                    requestAnimationFrame(() => {
+                         setTimeout(() => {
+                            resultsContainer.classList.remove('opacity-0', 'scale-95');
+                            resultsContainer.classList.add('opacity-100', 'scale-100');
+                         }, 10);
+                    });
                 }
             }
         });
@@ -388,10 +693,13 @@
             const cardBody = e.target.closest('[data-index]');
             if (cardBody) { openModal(cardBody.dataset.index); }
         });
-        detailsModal.addEventListener('click', (e) => { if (e.target === detailsModal) { closeModal(); } });
-        document.addEventListener('keydown', (e) => { if (e.key === "Escape" && !detailsModal.classList.contains('hidden')) { closeModal(); } });
-        document.addEventListener('DOMContentLoaded', () => { renderCategories(); });
+        detailsModal.addEventListener('click', (e) => { if (e.target === detailsModal) closeModal(); });
+        document.addEventListener('keydown', (e) => { if (e.key === "Escape") closeModal(); });
+        
+        // INICIO
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCategories();
+        });
     </script>
 </body>
 </html>
-
