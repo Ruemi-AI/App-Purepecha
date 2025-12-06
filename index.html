@@ -285,7 +285,7 @@
         let currentAudio = null;
         let currentlyPlayingButton = null;
 
-        // --- LÓGICA DE CONEXIÓN A VERTEX AI (NUEVA) ---
+        // --- LÓGICA DE CONEXIÓN A VERTEX AI  ---
         async function enviarAudioAVertexAI(audioBlob) {
             const url = `https://${LOCATION}-aiplatform.googleapis.com/v1/projects/${PROJECT_ID}/locations/${LOCATION}/endpoints/${ENDPOINT_ID}:predict`;
 
@@ -295,10 +295,10 @@
                 const base64Audio = reader.result.split(',')[1]; 
                 
                 const payload = {
-                    "instances": [
-                        { "audio_content": base64Audio }
-                    ]
-                };
+    "instances": [
+        { "the_input": base64Audio } // Intentamos usar el nombre de la capa de entrada
+    ]
+};
 
                 try {
                     const response = await fetch(url, {
@@ -697,5 +697,6 @@
     </script>
 </body>
 </html>
+
 
 
