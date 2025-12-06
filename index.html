@@ -436,7 +436,7 @@
         }
         function renderCategories() {
             const categories = ['Mostrar todo', ...new Set(dictionary.map(item => item.categoria))];
-            categoryFilters.innerHTML = '';
+            categoryFilters.innerHTML = ''; // Limpiar filtros antes de renderizar
             categories.forEach(category => {
                 const button = document.createElement('button');
                 button.className = 'category-btn px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-full hover:bg-slate-100 transition-colors';
